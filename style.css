@@ -135,3 +135,39 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   font-size:12px;
   line-height:1.55;
 }
+
+
+/* Painel do modelo óptico físico */
+.physics-note {
+  margin:-16px 0 24px;
+  color:#8f816e;
+  font:10px "DM Mono",monospace;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.result-metrics {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin:14px 0;
+}
+.result-metrics span {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:9px 10px;
+  background:#17130f;
+  border:1px solid #443a2c;
+  color:#ffd36f;
+  font:12px "DM Mono",monospace;
+}
+.result-metrics b {
+  color:#8f816e;
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+@media (max-width:420px) {
+  .result-metrics { grid-template-columns:1fr; }
+}
