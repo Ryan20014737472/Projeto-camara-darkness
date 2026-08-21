@@ -59,20 +59,25 @@
           <div class="camera-caption"><span><i class="status-dot"></i>Objeto iluminado</span><span>orifício</span><span>imagem invertida</span></div>
         </div>
         <aside class="controls" aria-label="Controles da simulação">
-          <h3>Ajustes</h3>
+          <h3>Ajustes físicos</h3>
+          <p class="physics-note">Modelo paraxial • luz de 550 nm</p>
           <div class="control">
-            <label for="aperture-control">Abertura <output id="aperture-value">10 mm</output></label>
-            <input id="aperture-control" type="range" min="3" max="20" value="10">
+            <label for="aperture-control">Diâmetro do orifício <output id="aperture-value">0,5 mm</output></label>
+            <input id="aperture-control" type="range" min="0.1" max="2.5" step="0.1" value="0.5">
           </div>
           <div class="control">
-            <label for="distance-control">Distância da tela <output id="distance-value">14 cm</output></label>
-            <input id="distance-control" type="range" min="6" max="24" value="14">
+            <label for="distance-control">Orifício → tela <output id="distance-value">14 cm</output></label>
+            <input id="distance-control" type="range" min="6" max="24" step="1" value="14">
           </div>
           <div class="control">
-            <label for="light-control">Intensidade da luz <output id="light-value">70%</output></label>
-            <input id="light-control" type="range" min="10" max="100" value="70">
+            <label for="object-distance-control">Objeto → orifício <output id="object-distance-value">200 cm</output></label>
+            <input id="object-distance-control" type="range" min="50" max="500" step="10" value="200">
           </div>
-          <p class="explanation" id="sharpness-text" aria-live="polite"></p>
+          <div class="control">
+            <label for="light-control">Iluminação do objeto <output id="light-value">70%</output></label>
+            <input id="light-control" type="range" min="10" max="100" step="5" value="70">
+          </div>
+          <div class="explanation" id="sharpness-text" role="status" aria-live="polite"></div>
         </aside>
       </div>
     </section>
