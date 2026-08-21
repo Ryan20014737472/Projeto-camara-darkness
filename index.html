@@ -33,13 +33,63 @@
       </div>
     </section>
 
-    <section class="principle reveal">
-      <p class="section-label">02 — Como funciona?</p>
-      <h2>Três elementos. Um fenômeno fascinante.</h2>
-      <div class="cards">
-        <article class="card"><span class="num">01</span><h3>A fonte</h3><p>A luz do Sol ou de uma lâmpada ilumina os objetos do lado de fora.</p></article>
-        <article class="card"><span class="num">02</span><h3>O orifício</h3><p>Existe um diâmetro ideal: grande demais causa borrão geométrico; pequeno demais aumenta a difração.</p></article>
-        <article class="card"><span class="num">03</span><h3>A imagem</h3><p>Na superfície interna, os raios se cruzam e formam uma imagem real, porém invertida.</p></article>
+    <section class="principle theory reveal" id="fundamentacao">
+      <p class="section-label">02 — Fundamentação teórica</p>
+      <h2>A física por trás da imagem.</h2>
+      <p class="theory-lead">A câmara escura pode ser compreendida combinando óptica geométrica e óptica ondulatória. A primeira explica a posição e o tamanho da imagem; a segunda mostra por que um orifício excessivamente pequeno também perde definição.</p>
+
+      <div class="theory-grid">
+        <article class="theory-card">
+          <span class="num">01</span>
+          <h3>Propagação da luz</h3>
+          <p>Em um meio homogêneo e transparente, a luz se propaga aproximadamente em linha reta. O pequeno orifício seleciona uma porção dos raios refletidos por cada ponto do objeto.</p>
+        </article>
+
+        <article class="theory-card">
+          <span class="num">02</span>
+          <h3>Imagem invertida</h3>
+          <p>Os raios vindos da parte superior do objeto alcançam a parte inferior da tela, e vice-versa. Por isso a projeção aparece invertida vertical e horizontalmente.</p>
+          <div class="formula" aria-label="Ampliação é igual a menos distância da imagem dividida pela distância do objeto">
+            <span>m = hᵢ / hₒ = −v / u</span>
+            <small>O sinal negativo representa a inversão.</small>
+          </div>
+        </article>
+
+        <article class="theory-card">
+          <span class="num">03</span>
+          <h3>Tamanho e luminosidade</h3>
+          <p>A ampliação depende da razão entre a distância da tela (<em>v</em>) e a distância do objeto (<em>u</em>). Já a quantidade de luz admitida cresce com a área do orifício.</p>
+          <div class="formula" aria-label="Área do orifício é igual a pi vezes metade do diâmetro ao quadrado">
+            <span>A = π(d / 2)²</span>
+            <small>Dobrar o diâmetro quadruplica a área.</small>
+          </div>
+        </article>
+
+        <article class="theory-card">
+          <span class="num">04</span>
+          <h3>Definição e difração</h3>
+          <p>Um orifício grande produz círculos geométricos sobrepostos. Quando ele fica pequeno demais, a natureza ondulatória da luz provoca difração. A melhor definição aparece no equilíbrio entre esses efeitos.</p>
+          <div class="formula formula-main" aria-label="Diâmetro ótimo é a raiz quadrada de duas vezes o comprimento de onda vezes as distâncias do objeto e da imagem, dividido pela soma das distâncias">
+            <span>d<sub>ótimo</sub> = √[2λuv / (u + v)]</span>
+            <small>O simulador adota λ = 550 nm, próximo ao verde-amarelo.</small>
+          </div>
+        </article>
+      </div>
+
+      <div class="theory-link">
+        <div>
+          <p class="theory-link-title">Da teoria para o simulador</p>
+          <p>Os controles alteram <strong>d</strong>, <strong>v</strong>, <strong>u</strong> e a iluminação. A página recalcula ampliação, diâmetro ótimo, borrão, exposição relativa e número f em tempo real.</p>
+        </div>
+        <a class="button theory-button" href="#simulador">Experimentar agora <span>→</span></a>
+      </div>
+
+      <div class="references">
+        <p class="references-title">Referências científicas</p>
+        <ol>
+          <li>Mielenz, K. D. <a href="https://nvlpubs.nist.gov/nistpubs/jres/104/5/j45mie.pdf" target="_blank" rel="noopener noreferrer">On the Diffraction Limit for Lensless Imaging</a>. Journal of Research of NIST, 1999.</li>
+          <li>Rayleigh, Lord. <a href="https://doi.org/10.1080/14786449108620080" target="_blank" rel="noopener noreferrer">On Pin-hole Photography</a>. Philosophical Magazine, 1891.</li>
+        </ol>
       </div>
     </section>
 
