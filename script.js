@@ -37,12 +37,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const light = Number(lightInput.value);
 
     const sharpness = Math.max(0.4, 4.5 - aperture * 0.32 + distance * 0.03);
-    const brightness = Math.min(1.55, 0.25 + aperture * 0.07 + light * 0.008);
+    const lightLevel = light / 100;
+    const apertureLight = 0.4 + (aperture / 20) * 0.75;
+    const brightness = 0.12 + lightLevel * 1.35 * apertureLight;
+    const imageOpacity = 0.08 + lightLevel * 0.92;
+    const rayStrength = 0.04 + lightLevel * 0.96;
+    const screenGlow = 0.02 + lightLevel * 0.38;
     const projection = 0.72 + distance * 0.018;
 
     stage.style.setProperty("--aperture", `${aperture}px`);
     stage.style.setProperty("--focus", `${sharpness.toFixed(2)}px`);
     stage.style.setProperty("--light", brightness.toFixed(2));
+    stage.style.setProperty("--image-opacity", imageOpacity.toFixed(2));
+    stage.style.setProperty("--ray-strength", rayStrength.toFixed(2));
+    stage.style.setProperty("--screen-glow", screenGlow.toFixed(2));
     stage.style.setProperty("--projection", projection.toFixed(2));
 
     apertureOutput.value = `${aperture} mm`;
