@@ -44,3 +44,33 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .reveal.visible { opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .reveal { opacity:1; transform:none; transition:none; } }
 @media (max-width:750px) { .aperture { opacity:.45; right:-5vw; } .intro-grid,.cards,.steps { grid-template-columns:1fr; } .cards { gap:10px; } .card { min-height:180px; } .card h3 { margin-top:28px; } .step { padding:24px 0; margin:0; border-right:0; border-bottom:1px solid rgba(255,255,255,.35); } section { padding-top:74px; padding-bottom:74px; } footer { gap:15px; flex-direction:column; } }
+
+.simulator { background:#15130f; color:var(--paper); overflow:hidden; }
+.simulator .section-label { color:#ffd36f; }
+.simulator h2 { max-width:880px; }
+.simulator-layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(260px,.7fr); gap:clamp(28px,5vw,72px); margin-top:48px; align-items:start; }
+.camera-stage { --aperture:10px; --projection:1; --focus:1.5px; --light:.8; position:relative; min-height:430px; background:#090806; border:1px solid #4c4332; overflow:hidden; isolation:isolate; }
+.scene { position:absolute; inset:24px auto 24px 22px; width:32%; min-width:150px; border:1px solid rgba(255,248,237,.28); background:linear-gradient(#9ac6df 0 55%,#d7b86f 55%); overflow:hidden; }
+.scene-sun { position:absolute; width:26px; height:26px; top:25px; right:24px; border-radius:50%; background:#fff3a8; box-shadow:0 0 24px #fff3a8; }
+.scene-tree { position:absolute; bottom:20%; left:12%; width:58px; height:138px; background:#4c3123; clip-path:polygon(43% 0,57% 0,58% 60%,100% 100%,0 100%,42% 60%); }
+.scene-house { position:absolute; bottom:20%; right:8%; width:78px; height:74px; background:#d75b3c; border:3px solid #57281b; }
+.scene-house::before { content:""; position:absolute; width:62px; height:42px; left:5px; top:-32px; background:#8e3527; clip-path:polygon(50% 0,100% 100%,0 100%); }
+.scene-house::after { content:""; position:absolute; width:16px; height:26px; left:27px; bottom:0; background:#392219; }
+.ray { position:absolute; left:30%; top:50%; height:1px; width:43%; transform-origin:left center; background:linear-gradient(90deg,rgba(255,224,130,.04),rgba(255,205,91,.5)); z-index:-1; }
+.ray-one { transform:rotate(-14deg); } .ray-two { transform:rotate(13deg); }
+.aperture-wall { position:absolute; left:52%; top:0; height:100%; width:16px; background:#262119; z-index:2; }
+.aperture-hole { position:absolute; left:50%; top:50%; width:var(--aperture); height:var(--aperture); border-radius:50%; transform:translate(-50%,-50%); background:#f4c05a; box-shadow:0 0 calc(var(--aperture) * 1.7) rgba(255,198,75,.55); }
+.screen { position:absolute; right:26px; top:24px; bottom:24px; width:31%; min-width:150px; display:grid; place-items:center; overflow:hidden; border:1px solid rgba(255,248,237,.35); background:linear-gradient(135deg,#e8e2c8,#777062); }
+.projection { width:76%; height:76%; transform:rotate(180deg) scale(var(--projection)); filter:brightness(var(--light)) blur(var(--focus)); transition:filter .18s ease,transform .18s ease; }
+.status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ffd36f; margin-right:8px; box-shadow:0 0 10px #ffd36f; }
+.camera-caption { display:flex; justify-content:space-between; gap:12px; padding:12px 2px 0; color:#cfc4b4; font:11px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.07em; }
+.controls { padding:24px; background:#211d17; border:1px solid #4c4332; }
+.controls h3 { font:600 28px "Playfair Display",serif; margin:0 0 24px; }
+.control { margin:0 0 25px; }
+.control label { display:flex; justify-content:space-between; font:12px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.06em; color:#eee1cd; margin-bottom:12px; }
+.control output { color:#ffd36f; }
+.control input { width:100%; accent-color:#f5b942; }
+.explanation { padding:16px 0 0; border-top:1px solid #554837; color:#c9b9a6; line-height:1.55; font-size:14px; }
+.explanation strong { color:#fff7e8; }
+@media (max-width:800px) { .simulator-layout { grid-template-columns:1fr; } .camera-stage { min-height:360px; } }
+@media (max-width:520px) { .scene { left:10px; } .screen { right:10px; } .aperture-wall { left:50%; } .camera-caption { font-size:9px; } }
