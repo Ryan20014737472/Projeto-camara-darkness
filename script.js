@@ -36,17 +36,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const distance = Number(distanceInput.value);
     const light = Number(lightInput.value);
 
-    const sharpness = Math.max(0.4, 4.5 - aperture * 0.32 + distance * 0.03);
+    const apertureLevel = (aperture - 3) / 17;
+    const distanceLevel = (distance - 6) / 18;
     const lightLevel = light / 100;
-    const apertureLight = 0.4 + (aperture / 20) * 0.75;
-    const brightness = 0.12 + lightLevel * 1.35 * apertureLight;
-    const imageOpacity = 0.08 + lightLevel * 0.92;
-    const rayStrength = 0.04 + lightLevel * 0.96;
-    const screenGlow = 0.02 + lightLevel * 0.38;
+
+    // Aberturas maiores e telas mais distantes aumentam o círculo de confusão.
+    const blur = 0.2 + apertureLevel * 4 + distanceLevel * 1.15;
+
+    // A iluminação percebida considera a fonte, a abertura e a perda com a distância.
+    const distanceLight = 1 - distanceLevel * 0.58;
+    const effectiveExposure = lightLevel * (0.18 + apertureLevel * 0.82) * distanceLight;
+    const brightness = 0.08 + effectiveExposure * 1.72;
+    const imageOpacity = Math.min(1, 0.07 + effectiveExposure * 1.65);
+    const rayStrength = Math.min(1, 0.04 + lightLevel * (0.35 + apertureLevel * 0.65));
+    const screenGlow = Math.min(0.45, 0.01 + effectiveExposure * 0.5);
     const projection = 0.72 + distance * 0.018;
 
     stage.style.setProperty("--aperture", `${aperture}px`);
-    stage.style.setProperty("--focus", `${sharpness.toFixed(2)}px`);
+    stage.style.setProperty("--focus", `${blur.toFixed(2)}px`);
     stage.style.setProperty("--light", brightness.toFixed(2));
     stage.style.setProperty("--image-opacity", imageOpacity.toFixed(2));
     stage.style.setProperty("--ray-strength", rayStrength.toFixed(2));
@@ -57,13 +64,52 @@ document.addEventListener("DOMContentLoaded", () => {
     distanceOutput.value = `${distance} cm`;
     lightOutput.value = `${light}%`;
 
-    if (aperture <= 7) {
-      sharpnessText.innerHTML = "<strong>Imagem nítida, porém escura.</strong> O orifício pequeno deixa passar poucos raios de luz.";
-    } else if (aperture >= 15) {
-      sharpnessText.innerHTML = "<strong>Imagem clara, porém borrada.</strong> A abertura grande permite a entrada de muitos raios.";
-    } else {
-      sharpnessText.innerHTML = "<strong>Bom equilíbrio.</strong> A câmera recebe luz suficiente mantendo os contornos reconhecíveis.";
-    }
+    const brightnessDescription =
+      effectiveExposure < 0.12 ? "muito escura" :
+      effectiveExposure < 0.28 ? "escura" :
+      effectiveExposure < 0.58 ? "bem iluminada" : "muito iluminada";
+
+    const sharpnessDescription =
+      blur < 1.35 ? "bem nítida" :
+      blur < 2.7 ? "moderadamente nítida" :
+      blur < 4 ? "pouco nítida" : "borrada";
+
+    const sizeDescription =
+      distance <= 10 ? "pequena" :
+      distance <= 17 ? "de tamanho médio" : "ampliada";
+
+    const apertureDescription =
+      aperture <= 7
+        ? "A abertura pequena limita a entrada de luz, mas melhora a definição."
+        : aperture <= 13
+          ? "A abertura média equilibra luminosidade e definição."
+          : "A abertura grande deixa entrar mais luz, porém sobrepõe mais raios e desfoca a imagem.";
+
+    const distanceDescription =
+      distance <= 10
+        ? "A tela próxima recebe uma projeção menor, mais concentrada e luminosa."
+        : distance <= 17
+          ? "A distância intermediária produz uma ampliação moderada com perda controlada de luz."
+          : "A tela distante amplia a projeção, mas espalha a luz por uma área maior e aumenta o desfoque.";
+
+    const lightDescription =
+      light < 35
+        ? "A fonte fraca reduz bastante a visibilidade."
+        : light < 70
+          ? "A fonte média fornece iluminação suficiente quando a abertura permite."
+          : "A fonte intensa aumenta a visibilidade sem alterar diretamente a nitidez.";
+
+    let verdict = "Configuração equilibrada";
+    if (effectiveExposure < 0.12) verdict = "Projeção quase invisível";
+    else if (blur >= 4) verdict = "Projeção clara, mas muito desfocada";
+    else if (effectiveExposure < 0.28) verdict = "Projeção visível, porém escura";
+    else if (blur < 1.35) verdict = "Projeção nítida";
+    else if (effectiveExposure >= 0.58) verdict = "Projeção forte e luminosa";
+
+    sharpnessText.innerHTML =
+      `<strong>${verdict}</strong>` +
+      `<span class="result-summary">A imagem fica ${brightnessDescription}, ${sharpnessDescription} e ${sizeDescription}.</span>` +
+      `<small>${apertureDescription} ${distanceDescription} ${lightDescription}</small>`;
   }
 
   [apertureInput, distanceInput, lightInput].forEach((input) => input.addEventListener("input", updateCamera));
