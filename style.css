@@ -93,3 +93,23 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   background-size:contain;
   background-position:center;
 }
+
+
+/* Resposta visual da intensidade luminosa */
+.camera-stage {
+  --image-opacity:.75;
+  --ray-strength:.7;
+  --screen-glow:.25;
+}
+.ray {
+  opacity:var(--ray-strength);
+  transition:opacity .18s ease;
+}
+.screen {
+  box-shadow:inset 0 0 42px rgba(245,185,66,var(--screen-glow));
+  transition:box-shadow .18s ease;
+}
+.projection {
+  opacity:var(--image-opacity);
+  transition:filter .18s ease,transform .18s ease,opacity .18s ease;
+}
