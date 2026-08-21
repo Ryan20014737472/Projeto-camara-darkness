@@ -12,7 +12,7 @@
   <header class="hero" id="inicio">
     <nav>
       <div class="brand"><span class="brand-mark"></span><span>Projeto IFA</span></div>
-      <a href="#experimento">Experimento ↓</a>
+      <a href="#simulador">Simulador ↓</a>
     </nav>
     <div class="beam"></div>
     <div class="aperture" aria-hidden="true"></div>
@@ -20,7 +20,7 @@
       <p class="eyebrow">Óptica • Luz • Imagem</p>
       <h1>Câmara<br><em>Escura.</em></h1>
       <p class="hero-text">Uma pequena abertura, um feixe de luz e o princípio que mudou para sempre a forma como enxergamos o mundo.</p>
-      <a class="button" href="#sobre">Descubra o fenômeno <span>→</span></a>
+      <a class="button" href="#simulador">Testar a câmara <span>→</span></a>
     </div>
   </header>
 
@@ -43,8 +43,46 @@
       </div>
     </section>
 
+    <section class="simulator reveal" id="simulador">
+      <p class="section-label">03 — Laboratório interativo</p>
+      <h2>Controle a luz.<br>Observe a imagem.</h2>
+      <div class="simulator-layout">
+        <div>
+          <div class="camera-stage" aria-label="Simulação de uma câmara escura">
+            <div class="scene" aria-hidden="true">
+              <div class="scene-sun"></div><div class="scene-tree"></div><div class="scene-house"></div>
+            </div>
+            <div class="ray ray-one"></div><div class="ray ray-two"></div>
+            <div class="aperture-wall"><div class="aperture-hole"></div></div>
+            <div class="screen" aria-label="Tela de projeção">
+              <div class="scene projection" aria-hidden="true">
+                <div class="scene-sun"></div><div class="scene-tree"></div><div class="scene-house"></div>
+              </div>
+            </div>
+          </div>
+          <div class="camera-caption"><span><i class="status-dot"></i>Objeto iluminado</span><span>orifício</span><span>imagem invertida</span></div>
+        </div>
+        <aside class="controls" aria-label="Controles da simulação">
+          <h3>Ajustes</h3>
+          <div class="control">
+            <label for="aperture-control">Abertura <output id="aperture-value">10 mm</output></label>
+            <input id="aperture-control" type="range" min="3" max="20" value="10">
+          </div>
+          <div class="control">
+            <label for="distance-control">Distância da tela <output id="distance-value">14 cm</output></label>
+            <input id="distance-control" type="range" min="6" max="24" value="14">
+          </div>
+          <div class="control">
+            <label for="light-control">Intensidade da luz <output id="light-value">70%</output></label>
+            <input id="light-control" type="range" min="10" max="100" value="70">
+          </div>
+          <p class="explanation" id="sharpness-text" aria-live="polite"></p>
+        </aside>
+      </div>
+    </section>
+
     <section class="experiment reveal" id="experimento">
-      <p class="section-label">03 — Faça em casa</p>
+      <p class="section-label">04 — Faça em casa</p>
       <h2>Construa a sua própria<br>câmara escura.</h2>
       <div class="steps">
         <div class="step"><h3>Separe</h3><p>Uma caixa de sapato, papel vegetal, fita adesiva e papel-alumínio.</p></div>
