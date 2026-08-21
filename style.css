@@ -113,3 +113,25 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   opacity:var(--image-opacity);
   transition:filter .18s ease,transform .18s ease,opacity .18s ease;
 }
+
+
+/* Leitura combinada dos controles */
+.explanation strong,
+.explanation .result-summary,
+.explanation small {
+  display:block;
+}
+.explanation strong {
+  margin-bottom:8px;
+  color:#ffd36f;
+  font-size:16px;
+}
+.explanation .result-summary {
+  margin-bottom:9px;
+  color:#fff7e8;
+}
+.explanation small {
+  color:#c9b9a6;
+  font-size:12px;
+  line-height:1.55;
+}
