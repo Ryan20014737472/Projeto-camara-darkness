@@ -278,3 +278,15 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   .theory-card { min-height:0; }
   .theory-link { align-items:flex-start; flex-direction:column; }
 }
+
+
+/* Navegação superior */
+.brand { opacity:1; color:var(--paper); text-decoration:none; }
+.nav-links { display:flex; align-items:center; gap:clamp(16px,3vw,38px); }
+.nav-links a { transition:opacity .2s ease,color .2s ease; }
+.nav-links a:hover,
+.nav-links a:focus-visible { color:var(--sun); opacity:1; outline:none; }
+@media (max-width:520px) {
+  .nav-links { gap:12px; }
+  .nav-links a { font-size:9px; letter-spacing:.07em; }
+}
