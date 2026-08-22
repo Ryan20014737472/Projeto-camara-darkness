@@ -434,3 +434,214 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 @media (max-width:520px) {
   .brand span:last-child { display:none; }
 }
+
+
+/* Metodologia experimental */
+.methodology { background:var(--rust); color:#fff8ed; }
+.methodology .section-label { color:#ffd36f; }
+.method-lead {
+  max-width:760px;
+  margin:28px 0 0;
+  color:#ffe4c5;
+  font-size:18px;
+  line-height:1.65;
+}
+.method-overview,
+.experiment-notes {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin-top:48px;
+}
+.materials-card,
+.measurements-card,
+.experiment-notes article {
+  padding:30px;
+  background:#fff8ed;
+  color:var(--ink);
+}
+.method-title {
+  margin:0 0 20px;
+  font:600 25px "Playfair Display",serif;
+}
+.materials-list {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 24px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.materials-list li,
+.experiment-notes li {
+  position:relative;
+  padding:11px 0 11px 18px;
+  border-top:1px solid #dfd3c3;
+  color:#5f554b;
+  line-height:1.45;
+}
+.materials-list li::before,
+.experiment-notes li::before {
+  content:"";
+  position:absolute;
+  top:18px;
+  left:0;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--rust);
+}
+.box-type {
+  margin:-8px 0 22px;
+  color:#5f554b;
+}
+.measurement-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.measurement-grid div {
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  padding:13px;
+  background:#ece3d6;
+}
+.measurement-grid span {
+  color:#8c7765;
+  font:9px "DM Mono",monospace;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.measurement-grid strong { font:500 17px "DM Mono",monospace; }
+.measurement-note {
+  margin:18px 0 0;
+  color:#7d6e61;
+  font-size:12px;
+  line-height:1.5;
+}
+.construction {
+  margin-top:18px;
+  padding:30px;
+  background:#211b16;
+}
+.construction > .method-title { color:#ffd36f; }
+.construction-steps {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 36px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.construction-steps > li {
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:14px;
+  padding:22px 0;
+  border-top:1px solid #564537;
+}
+.construction-steps > li > span {
+  padding-top:4px;
+  color:#ffd36f;
+  font:11px "DM Mono",monospace;
+}
+.construction-steps h3 {
+  margin:0 0 7px;
+  color:#fff8ed;
+  font-size:18px;
+}
+.construction-steps p {
+  margin:0;
+  color:#cdbba7;
+  font-size:14px;
+  line-height:1.55;
+}
+.experiment-notes { margin-top:18px; }
+.experiment-notes ul {
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.safety-card { border-top:4px solid #f5b942; }
+.photo-register {
+  margin-top:18px;
+  padding:30px;
+  background:#fff8ed;
+  color:var(--ink);
+}
+.photo-heading {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:24px;
+}
+.photo-heading .method-title { margin-bottom:6px; }
+.photo-heading p:last-child {
+  margin:0;
+  color:#6c5f53;
+}
+.photo-heading > span {
+  color:var(--rust);
+  font:10px "DM Mono",monospace;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.photo-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin-top:26px;
+}
+.photo-grid figure { margin:0; }
+.photo-placeholder {
+  aspect-ratio:4/3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border:1px dashed #9e8c7b;
+  background:
+    linear-gradient(135deg,rgba(198,91,52,.06) 25%,transparent 25%) 0 0/24px 24px,
+    #e8dfd1;
+  text-align:center;
+}
+.photo-placeholder span,
+.photo-placeholder small {
+  color:#8c7765;
+  font:10px "DM Mono",monospace;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.photo-placeholder strong {
+  font:600 22px "Playfair Display",serif;
+}
+.photo-grid figcaption {
+  padding:10px 2px 0;
+  color:#6c5f53;
+  font-size:12px;
+}
+.nav-links { white-space:nowrap; }
+@media (max-width:750px) {
+  .method-overview,
+  .experiment-notes,
+  .construction-steps,
+  .photo-grid { grid-template-columns:1fr; }
+  .materials-list { grid-template-columns:1fr; }
+}
+@media (max-width:520px) {
+  .nav-links {
+    max-width:calc(100vw - 84px);
+    gap:11px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .nav-links::-webkit-scrollbar { display:none; }
+  .measurement-grid { grid-template-columns:1fr; }
+  .materials-card,
+  .measurements-card,
+  .construction,
+  .experiment-notes article,
+  .photo-register { padding:22px; }
+}
