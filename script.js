@@ -164,9 +164,38 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   let challengeActive = false;
+  let cameraFrameId = 0;
+  let resultAnnouncementTimer = 0;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const decimal = (value, digits = 1) => value.toFixed(digits).replace(".", ",");
+
+  function setTextIfChanged(element, text) {
+    if (element && element.textContent !== text) element.textContent = text;
+  }
+
+  function scheduleCameraUpdate() {
+    if (cameraFrameId) return;
+
+    cameraFrameId = window.requestAnimationFrame(() => {
+      cameraFrameId = 0;
+      updateCamera();
+    });
+  }
+
+  function queueResultAnnouncement() {
+    result.setAttribute("aria-busy", "true");
+    window.clearTimeout(resultAnnouncementTimer);
+    resultAnnouncementTimer = window.setTimeout(() => {
+      result.setAttribute("aria-busy", "false");
+    }, 180);
+  }
+
+  function setPresetAvailability(disabled) {
+    presetButtons.forEach((button) => {
+      button.disabled = disabled;
+    });
+  }
 
   function calculateOptimalDiameter(imageDistanceCm, objectDistanceCm) {
     const imageDistanceMm = imageDistanceCm * MM_PER_CM;
@@ -314,16 +343,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function markChallengeItem(item, complete) {
     if (!item) return;
+
     item.classList.toggle("done", complete);
     const label = item.textContent.trim();
-    item.setAttribute(
-      "aria-label",
-      (complete ? "Concluído: " : "Pendente: ") + label
-    );
+    const accessibleLabel = (complete ? "Concluído: " : "Pendente: ") + label;
+    if (item.getAttribute("aria-label") !== accessibleLabel) {
+      item.setAttribute("aria-label", accessibleLabel);
+    }
   }
 
   function resetChallengeView() {
     challengeActive = false;
+    setPresetAvailability(false);
     if (challengeProgress) {
       challengeProgress.hidden = true;
       challengeProgress.classList.remove("complete");
@@ -355,21 +386,25 @@ document.addEventListener("DOMContentLoaded", () => {
     challengeProgress.classList.toggle("complete", complete);
 
     if (!challengeMessage) return;
+
+    let message;
     if (complete) {
-      challengeMessage.textContent =
+      message =
         "Desafio concluído: a projeção está visível e próxima da melhor definição calculada.";
     } else if (!visible) {
-      challengeMessage.textContent =
+      message =
         "A projeção ainda está escura. Aumente a iluminação ou abra um pouco o orifício.";
     } else if (!nearIdeal) {
-      challengeMessage.textContent =
+      message =
         state.apertureMm < state.optimalDiameterMm
           ? "O orifício está pequeno demais. Aumente-o em direção ao marcador ideal."
           : "O orifício está grande demais. Reduza-o em direção ao marcador ideal.";
     } else {
-      challengeMessage.textContent =
+      message =
         "Você está perto. Faça um ajuste fino no diâmetro para reduzir o borrão calculado.";
     }
+
+    setTextIfChanged(challengeMessage, message);
   }
 
   function updateRangeProgress(input) {
@@ -504,6 +539,7 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (relativeExposure > 2.5) verdict = "Projeção muito luminosa";
     else if (relativeExposure < 0.3) verdict = "Projeção nítida, porém muito escura";
 
+    queueResultAnnouncement();
     result.innerHTML =
       "<strong>" +
       verdict +
@@ -542,7 +578,7 @@ document.addEventListener("DOMContentLoaded", () => {
     (input) => {
       input.addEventListener("input", () => {
         clearPreset();
-        updateCamera();
+        scheduleCameraUpdate();
       });
     }
   );
@@ -591,6 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (challengeButton) {
     challengeButton.addEventListener("click", () => {
       clearPreset();
+      setPresetAvailability(true);
       challengeActive = true;
       if (challengeProgress) challengeProgress.hidden = false;
       challengeButton.textContent = "Reiniciar desafio";
@@ -601,6 +638,7 @@ document.addEventListener("DOMContentLoaded", () => {
         objectDistance: 200,
         light: 30
       });
+      apertureInput.focus();
     });
   }
 
