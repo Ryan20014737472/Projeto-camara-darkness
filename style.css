@@ -1913,3 +1913,172 @@ footer {
     color:#000 !important;
   }
 }
+
+/* Estados de interação, preferências do sistema e telas curtas */
+html {
+  color-scheme:light;
+  accent-color:var(--sun);
+}
+button,
+.button,
+summary,
+input[type="range"] {
+  touch-action:manipulation;
+}
+.sim-button:disabled,
+.button:disabled {
+  opacity:.48;
+  cursor:not-allowed;
+  filter:saturate(.5);
+  transform:none;
+  box-shadow:none;
+}
+.control input[type="range"]:active {
+  cursor:grabbing;
+}
+.control input[type="range"]::-webkit-slider-thumb {
+  transition:box-shadow .18s ease,transform .18s var(--ease-out);
+}
+.control input[type="range"]::-moz-range-thumb {
+  transition:box-shadow .18s ease,transform .18s var(--ease-out);
+}
+.control input[type="range"]:focus-visible::-webkit-slider-thumb {
+  transform:scale(1.06);
+  box-shadow:
+    0 0 0 5px rgba(245,185,66,.2),
+    0 0 0 7px var(--ink),
+    0 3px 12px rgba(0,0,0,.5);
+}
+.control input[type="range"]:focus-visible::-moz-range-thumb {
+  transform:scale(1.06);
+  box-shadow:
+    0 0 0 5px rgba(245,185,66,.2),
+    0 0 0 7px var(--ink),
+    0 3px 12px rgba(0,0,0,.5);
+}
+.calculation-panel[open] summary {
+  border-bottom-color:#5b4d3a;
+  background:rgba(245,185,66,.035);
+  color:var(--sun-pale);
+}
+
+@media (hover:none) {
+  .button:hover,
+  .brand:hover,
+  .context-card:hover,
+  .theory-card:hover,
+  .materials-card:hover,
+  .measurements-card:hover,
+  .experiment-notes article:hover,
+  .comparison-grid article:hover,
+  .method-image:hover img {
+    transform:none;
+  }
+  .project-meta div:hover,
+  .construction-steps > li:hover,
+  .settings-table > div:hover {
+    padding-inline:initial;
+    background:transparent;
+  }
+  .specific-objectives li:hover {
+    padding-left:40px;
+  }
+}
+
+@media (pointer:coarse) {
+  .control input[type="range"]::-webkit-slider-thumb {
+    width:22px;
+    height:22px;
+    margin-top:-10px;
+  }
+  .control input[type="range"]::-moz-range-thumb {
+    width:18px;
+    height:18px;
+  }
+}
+
+@media (max-height:560px) and (orientation:landscape) {
+  .hero {
+    min-height:540px;
+    padding-bottom:36px;
+  }
+  .hero-content {
+    padding-top:38px;
+  }
+  .hero-text {
+    margin-block:22px;
+  }
+  .aperture {
+    right:7vw;
+    bottom:7vh;
+    width:min(27vw,250px);
+  }
+}
+
+@media (prefers-contrast:more) {
+  :root {
+    --text-muted:#3c342d;
+    --line:#8e7d69;
+    --line-dark:#78694f;
+    --label-dark:#dfd1bf;
+    --copy-dark:#eadcca;
+  }
+  .nav-links a,
+  nav a {
+    opacity:1;
+  }
+  .context-card,
+  .theory-card,
+  .materials-card,
+  .measurements-card,
+  .experiment-notes article,
+  .comparison-grid article,
+  .controls,
+  .camera-stage {
+    border-width:2px;
+  }
+  .section-label::after {
+    opacity:1;
+  }
+}
+
+@media print {
+  .project-context,
+  .theory,
+  .methodology,
+  .results {
+    background:#fff !important;
+  }
+  .section-label,
+  h2,
+  h3,
+  p,
+  li,
+  strong,
+  small,
+  .methodology p,
+  .construction p,
+  .construction li,
+  .observed-result p,
+  .conclusion p {
+    color:#000 !important;
+  }
+  .research-question,
+  .construction,
+  .observed-result,
+  .conclusion,
+  .context-card,
+  .theory-card,
+  .materials-card,
+  .measurements-card,
+  .experiment-notes article,
+  .comparison-grid article,
+  .best-settings,
+  .limitations > div {
+    border:1px solid #888 !important;
+    background:#fff !important;
+  }
+  .simulator {
+    break-before:page;
+  }
+}
