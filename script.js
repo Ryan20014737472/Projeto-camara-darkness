@@ -257,6 +257,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function updateRangeProgress(input) {
+    const minimum = Number(input.min);
+    const maximum = Number(input.max);
+    const current = Number(input.value);
+    const progress =
+      maximum === minimum
+        ? 0
+        : clamp(((current - minimum) / (maximum - minimum)) * 100, 0, 100);
+    input.style.setProperty("--range-progress", progress.toFixed(2) + "%");
+  }
+
   function updateCamera() {
     const apertureMm = Number(apertureInput.value);
     const imageDistanceCm = Number(distanceInput.value);
@@ -335,6 +346,10 @@ document.addEventListener("DOMContentLoaded", () => {
     distanceInput.setAttribute("aria-valuetext", distanceOutput.value);
     objectDistanceInput.setAttribute("aria-valuetext", objectDistanceOutput.value);
     lightInput.setAttribute("aria-valuetext", lightOutput.value);
+
+    [apertureInput, distanceInput, objectDistanceInput, lightInput].forEach(
+      updateRangeProgress
+    );
 
     const brightnessDescription =
       relativeExposure < 0.08
