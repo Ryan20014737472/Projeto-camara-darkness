@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const revealItems = document.querySelectorAll(".reveal");
   const observer = new IntersectionObserver(
     (entries) => entries.forEach((entry) => {
@@ -16,9 +17,41 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = document.querySelector(link.getAttribute("href"));
       if (!target) return;
       event.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({
+        behavior: reducedMotionQuery.matches ? "auto" : "smooth",
+        block: "start"
+      });
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      window.setTimeout(
+        () => target.focus({ preventScroll: true }),
+        reducedMotionQuery.matches ? 0 : 350
+      );
     });
   });
+
+  const navigationLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+  const navigationTargets = navigationLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  function setCurrentNavigation(targetId) {
+    navigationLinks.forEach((link) => {
+      const isCurrent = link.getAttribute("href") === "#" + targetId;
+      if (isCurrent) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  }
+
+  if ("IntersectionObserver" in window) {
+    const navigationObserver = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries.find((entry) => entry.isIntersecting);
+        if (visibleEntry) setCurrentNavigation(visibleEntry.target.id);
+      },
+      { rootMargin: "-20% 0px -65% 0px", threshold: 0 }
+    );
+    navigationTargets.forEach((target) => navigationObserver.observe(target));
+  }
 
   const stage = document.querySelector(".camera-stage");
   const apertureInput = document.querySelector("#aperture-control");
@@ -165,7 +198,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function markChallengeItem(item, complete) {
-    if (item) item.classList.toggle("done", complete);
+    if (!item) return;
+    item.classList.toggle("done", complete);
+    const label = item.textContent.trim();
+    item.setAttribute(
+      "aria-label",
+      (complete ? "Concluído: " : "Pendente: ") + label
+    );
   }
 
   function resetChallengeView() {
@@ -174,10 +213,13 @@ document.addEventListener("DOMContentLoaded", () => {
       challengeProgress.hidden = true;
       challengeProgress.classList.remove("complete");
     }
-    [challengeLight, challengeAperture, challengeSharpness].forEach((item) => {
-      if (item) item.classList.remove("done");
-    });
-    if (challengeButton) challengeButton.textContent = "Iniciar desafio";
+    [challengeLight, challengeAperture, challengeSharpness].forEach((item) =>
+      markChallengeItem(item, false)
+    );
+    if (challengeButton) {
+      challengeButton.textContent = "Iniciar desafio";
+      challengeButton.setAttribute("aria-expanded", "false");
+    }
   }
 
   function updateChallenge(state) {
@@ -288,6 +330,11 @@ document.addEventListener("DOMContentLoaded", () => {
     distanceOutput.value = imageDistanceCm + " cm";
     objectDistanceOutput.value = objectDistanceCm + " cm";
     lightOutput.value = lightPercent + "%";
+
+    apertureInput.setAttribute("aria-valuetext", apertureOutput.value);
+    distanceInput.setAttribute("aria-valuetext", distanceOutput.value);
+    objectDistanceInput.setAttribute("aria-valuetext", objectDistanceOutput.value);
+    lightInput.setAttribute("aria-valuetext", lightOutput.value);
 
     const brightnessDescription =
       relativeExposure < 0.08
@@ -443,6 +490,7 @@ document.addEventListener("DOMContentLoaded", () => {
       challengeActive = true;
       if (challengeProgress) challengeProgress.hidden = false;
       challengeButton.textContent = "Reiniciar desafio";
+      challengeButton.setAttribute("aria-expanded", "true");
       setValues({
         aperture: 0.2,
         imageDistance: 33,
