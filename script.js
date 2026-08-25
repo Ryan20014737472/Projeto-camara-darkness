@@ -19,8 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     revealItems.forEach((item) => observer.observe(item));
   }
 
-  function getAnchorTarget(link) {
-    const hash = link.getAttribute("href");
+  function getHashTarget(hash) {
     if (!hash || hash === "#" || !hash.startsWith("#")) return null;
 
     try {
@@ -28,6 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch {
       return null;
     }
+  }
+
+  function getAnchorTarget(link) {
+    return getHashTarget(link.getAttribute("href"));
   }
 
   function focusTarget(target) {
@@ -86,6 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
       else link.removeAttribute("aria-current");
     });
   }
+
+  const initialTarget = getHashTarget(window.location.hash);
+  setCurrentNavigation(initialTarget ? initialTarget.id : "inicio");
+
+  window.addEventListener("popstate", () => {
+    const historyTarget = getHashTarget(window.location.hash);
+    setCurrentNavigation(historyTarget ? historyTarget.id : "inicio");
+  });
 
   if ("IntersectionObserver" in window) {
     const navigationObserver = new IntersectionObserver(
@@ -442,6 +453,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const complete = visible && nearIdeal && sharp;
     challengeProgress.classList.toggle("complete", complete);
+    setTextIfChanged(
+      challengeButton,
+      complete ? "Tentar novamente" : "Reiniciar desafio"
+    );
 
     if (!challengeMessage) return;
 
