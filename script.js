@@ -1,3 +1,5 @@
+"use strict";
+
 document.addEventListener("DOMContentLoaded", () => {
   document.documentElement.classList.add("reveal-ready");
 
