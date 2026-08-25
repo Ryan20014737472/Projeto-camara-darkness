@@ -1722,7 +1722,7 @@ nav {
   background:rgba(255,255,255,.025);
 }
 .safety-card {
-  border-top-color:var(--sun) !important;
+  border-top:4px solid var(--sun);
 }
 .method-image {
   overflow:hidden;
