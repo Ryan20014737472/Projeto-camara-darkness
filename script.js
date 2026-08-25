@@ -7,10 +7,15 @@ document.addEventListener("DOMContentLoaded", () => {
     typeof window.matchMedia === "function"
       ? window.matchMedia("(prefers-reduced-motion: reduce)")
       : { matches: false };
-  const requestFrame =
-    typeof window.requestAnimationFrame === "function"
-      ? window.requestAnimationFrame.bind(window)
-      : (callback) => window.setTimeout(callback, 16);
+  const supportsAnimationFrame =
+    typeof window.requestAnimationFrame === "function" &&
+    typeof window.cancelAnimationFrame === "function";
+  const requestFrame = supportsAnimationFrame
+    ? window.requestAnimationFrame.bind(window)
+    : (callback) => window.setTimeout(callback, 16);
+  const cancelFrame = supportsAnimationFrame
+    ? window.cancelAnimationFrame.bind(window)
+    : window.clearTimeout.bind(window);
   const revealItems = document.querySelectorAll(".reveal");
 
   if (reducedMotionQuery.matches || !("IntersectionObserver" in window)) {
@@ -225,6 +230,13 @@ document.addEventListener("DOMContentLoaded", () => {
     lightStrongPercent: 70
   });
 
+  const simulatorInputs = [
+    apertureInput,
+    distanceInput,
+    objectDistanceInput,
+    lightInput
+  ];
+
   let challengeActive = false;
   let cameraFrameId = 0;
   let resultAnnouncementTimer = 0;
@@ -253,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 180);
   }
 
-  function setPresetAvailability(disabled) {
+  function setPresetsDisabled(disabled) {
     presetButtons.forEach((button) => {
       button.disabled = disabled;
     });
@@ -369,6 +381,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return values;
   }
 
+  function cancelScheduledCameraUpdate() {
+    if (!cameraFrameId) return;
+
+    cancelFrame(cameraFrameId);
+    cameraFrameId = 0;
+  }
+
   function setValues(values) {
     if (values.aperture !== undefined) {
       setInputValue(apertureInput, values.aperture);
@@ -382,6 +401,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (values.light !== undefined) {
       setInputValue(lightInput, values.light);
     }
+
+    cancelScheduledCameraUpdate();
     updateCamera();
   }
 
@@ -476,7 +497,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function resetChallengeView() {
     challengeActive = false;
-    setPresetAvailability(false);
+    setPresetsDisabled(false);
     if (challengeProgress) {
       challengeProgress.hidden = true;
       challengeProgress.classList.remove("complete");
@@ -605,9 +626,7 @@ document.addEventListener("DOMContentLoaded", () => {
     objectDistanceInput.setAttribute("aria-valuetext", objectDistanceOutput.value);
     lightInput.setAttribute("aria-valuetext", lightOutput.value);
 
-    [apertureInput, distanceInput, objectDistanceInput, lightInput].forEach(
-      updateRangeProgress
-    );
+    simulatorInputs.forEach(updateRangeProgress);
 
     const brightnessDescription =
       relativeExposure < THRESHOLDS.exposureInvisible
@@ -722,7 +741,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  [apertureInput, distanceInput, objectDistanceInput, lightInput].forEach(
+  simulatorInputs.forEach(
     (input) => {
       input.addEventListener("input", () => {
         clearPreset();
@@ -753,7 +772,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (challengeButton) {
     challengeButton.addEventListener("click", () => {
       clearPreset();
-      setPresetAvailability(true);
+      setPresetsDisabled(true);
       challengeActive = true;
       if (challengeProgress) challengeProgress.hidden = false;
       challengeButton.textContent = "Reiniciar desafio";
