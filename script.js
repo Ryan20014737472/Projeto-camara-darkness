@@ -595,7 +595,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "/" +
       objectDistanceCm +
       " produz ampliação de " +
-      magnification.toFixed(3) +
+      decimal(magnification, 3) +
       "×; afastar a tela aumenta a imagem e reduz a irradiância.";
 
     const lightExplanation =
@@ -613,7 +613,7 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (relativeExposure < 0.3) verdict = "Projeção nítida, porém muito escura";
 
     const metrics = [
-      ["Ampliação", magnification.toFixed(3) + "×"],
+      ["Ampliação", decimal(magnification, 3) + "×"],
       ["Orifício ideal", decimal(optimalDiameterMm, 2) + " mm"],
       ["Borrão calculado", decimal(totalBlurMm, 2) + " mm"],
       ["Exposição relativa", decimal(relativeExposure, 2) + "×"],
