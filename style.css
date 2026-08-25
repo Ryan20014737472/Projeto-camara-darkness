@@ -2104,6 +2104,15 @@ input[type="range"] {
   .simulator {
     break-before:page;
   }
+  .camera-stage {
+    break-inside:avoid;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+  .camera-stage .projection {
+    opacity:1 !important;
+    filter:none !important;
+  }
 }
 
 /* Áreas seguras de celulares com recorte e controles em alto contraste */
