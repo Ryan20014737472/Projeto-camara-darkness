@@ -313,8 +313,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateComparison(apertureMm, optimalDiameterMm) {
-    if (chosenAperture) chosenAperture.textContent = decimal(apertureMm, 2) + " mm";
-    if (idealAperture) idealAperture.textContent = decimal(optimalDiameterMm, 2) + " mm";
+    setTextIfChanged(chosenAperture, decimal(apertureMm, 2) + " mm");
+    setTextIfChanged(idealAperture, decimal(optimalDiameterMm, 2) + " mm");
 
     const min = Number(apertureInput.min);
     const max = Number(apertureInput.max);
@@ -328,16 +328,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const differencePercent = Math.abs(signedDifference) * 100;
 
     if (differencePercent <= 12) {
-      differenceText.textContent =
-        "O valor escolhido está na faixa ideal para estas distâncias.";
+      setTextIfChanged(
+        differenceText,
+        "O valor escolhido está na faixa ideal para estas distâncias."
+      );
     } else if (signedDifference < 0) {
-      differenceText.textContent =
+      setTextIfChanged(
+        differenceText,
         Math.round(differencePercent) +
-        "% menor que o ideal: a difração tende a dominar.";
+          "% menor que o ideal: a difração tende a dominar."
+      );
     } else {
-      differenceText.textContent =
+      setTextIfChanged(
+        differenceText,
         Math.round(differencePercent) +
-        "% maior que o ideal: o borrão geométrico tende a dominar.";
+          "% maior que o ideal: o borrão geométrico tende a dominar."
+      );
     }
   }
 
@@ -539,8 +545,17 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (relativeExposure > 2.5) verdict = "Projeção muito luminosa";
     else if (relativeExposure < 0.3) verdict = "Projeção nítida, porém muito escura";
 
-    queueResultAnnouncement();
-    result.innerHTML =
+    const metrics = [
+      ["Ampliação", magnification.toFixed(3) + "×"],
+      ["Orifício ideal", decimal(optimalDiameterMm, 2) + " mm"],
+      ["Borrão calculado", decimal(totalBlurMm, 2) + " mm"],
+      ["Exposição relativa", decimal(relativeExposure, 2) + "×"],
+      ["Número f", "f/" + Math.round(fNumber)]
+    ];
+    const metricsMarkup = metrics
+      .map(([label, value]) => "<span><b>" + label + "</b>" + value + "</span>")
+      .join("");
+    const resultMarkup =
       "<strong>" +
       verdict +
       "</strong>" +
@@ -552,11 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sizeDescription +
       ".</span>" +
       '<span class="result-metrics">' +
-        "<span><b>Ampliação</b>" + magnification.toFixed(3) + "×</span>" +
-        "<span><b>Orifício ideal</b>" + decimal(optimalDiameterMm, 2) + " mm</span>" +
-        "<span><b>Borrão calculado</b>" + decimal(totalBlurMm, 2) + " mm</span>" +
-        "<span><b>Exposição relativa</b>" + decimal(relativeExposure, 2) + "×</span>" +
-        "<span><b>Número f</b>f/" + Math.round(fNumber) + "</span>" +
+      metricsMarkup +
       "</span>" +
       "<small>" +
       apertureExplanation +
@@ -565,6 +576,11 @@ document.addEventListener("DOMContentLoaded", () => {
       " " +
       lightExplanation +
       "</small>";
+
+    if (result.innerHTML !== resultMarkup) {
+      queueResultAnnouncement();
+      result.innerHTML = resultMarkup;
+    }
 
     updateChallenge({
       apertureMm,
