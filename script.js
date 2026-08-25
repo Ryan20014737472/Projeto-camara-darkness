@@ -1,16 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.documentElement.classList.add("reveal-ready");
+
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const revealItems = document.querySelectorAll(".reveal");
-  const observer = new IntersectionObserver(
-    (entries) => entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target);
-      }
-    }),
-    { threshold: 0.15 }
-  );
-  revealItems.forEach((item) => observer.observe(item));
+
+  if (reducedMotionQuery.matches || !("IntersectionObserver" in window)) {
+    revealItems.forEach((item) => item.classList.add("visible"));
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.15 }
+    );
+    revealItems.forEach((item) => observer.observe(item));
+  }
 
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
