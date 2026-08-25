@@ -162,6 +162,26 @@ document.addEventListener("DOMContentLoaded", () => {
     objectDistance: 200,
     light: 70
   });
+  const STATIC_PRESETS = Object.freeze({
+    diffraction: Object.freeze({
+      aperture: 0.1,
+      imageDistance: 40,
+      objectDistance: 200,
+      light: 100
+    }),
+    blur: Object.freeze({
+      aperture: 2.5,
+      imageDistance: 40,
+      objectDistance: 80,
+      light: 100
+    })
+  });
+  const CHALLENGE_START = Object.freeze({
+    aperture: 0.2,
+    imageDistance: 33,
+    objectDistance: 200,
+    light: 30
+  });
 
   let challengeActive = false;
   let cameraFrameId = 0;
@@ -276,12 +296,44 @@ document.addEventListener("DOMContentLoaded", () => {
     activeButton.setAttribute("aria-pressed", "true");
   }
 
+  function setInputValue(input, value) {
+    const numericValue = Number(value);
+    if (!Number.isFinite(numericValue)) return;
+
+    const minimum = Number(input.min);
+    const maximum = Number(input.max);
+    input.value = String(clamp(numericValue, minimum, maximum));
+  }
+
   function setValues(values) {
-    if (values.aperture !== undefined) apertureInput.value = String(values.aperture);
-    if (values.imageDistance !== undefined) distanceInput.value = String(values.imageDistance);
-    if (values.objectDistance !== undefined) objectDistanceInput.value = String(values.objectDistance);
-    if (values.light !== undefined) lightInput.value = String(values.light);
+    if (values.aperture !== undefined) {
+      setInputValue(apertureInput, values.aperture);
+    }
+    if (values.imageDistance !== undefined) {
+      setInputValue(distanceInput, values.imageDistance);
+    }
+    if (values.objectDistance !== undefined) {
+      setInputValue(objectDistanceInput, values.objectDistance);
+    }
+    if (values.light !== undefined) {
+      setInputValue(lightInput, values.light);
+    }
     updateCamera();
+  }
+
+  function getPresetValues(preset) {
+    if (preset === "ideal") {
+      const ideal = calculateOptimalDiameter(
+        Number(distanceInput.value),
+        Number(objectDistanceInput.value)
+      );
+      return {
+        aperture: Math.round(ideal * 100) / 100,
+        light: DEFAULTS.light
+      };
+    }
+
+    return STATIC_PRESETS[preset] || null;
   }
 
   function setRay(line, x1, y1, x2, y2) {
@@ -602,33 +654,11 @@ document.addEventListener("DOMContentLoaded", () => {
   presetButtons.forEach((button) => {
     button.setAttribute("aria-pressed", "false");
     button.addEventListener("click", () => {
-      const preset = button.dataset.preset;
-      activatePreset(button);
+      const values = getPresetValues(button.dataset.preset);
+      if (!values) return;
 
-      if (preset === "ideal") {
-        const ideal = calculateOptimalDiameter(
-          Number(distanceInput.value),
-          Number(objectDistanceInput.value)
-        );
-        setValues({
-          aperture: clamp(Math.round(ideal * 100) / 100, 0.1, 2.5),
-          light: 70
-        });
-      } else if (preset === "diffraction") {
-        setValues({
-          aperture: 0.1,
-          imageDistance: 40,
-          objectDistance: 200,
-          light: 100
-        });
-      } else if (preset === "blur") {
-        setValues({
-          aperture: 2.5,
-          imageDistance: 40,
-          objectDistance: 80,
-          light: 100
-        });
-      }
+      activatePreset(button);
+      setValues(values);
     });
   });
 
@@ -648,12 +678,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (challengeProgress) challengeProgress.hidden = false;
       challengeButton.textContent = "Reiniciar desafio";
       challengeButton.setAttribute("aria-expanded", "true");
-      setValues({
-        aperture: 0.2,
-        imageDistance: 33,
-        objectDistance: 200,
-        light: 30
-      });
+      setValues(CHALLENGE_START);
       apertureInput.focus();
     });
   }
