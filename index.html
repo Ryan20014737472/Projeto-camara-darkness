@@ -129,7 +129,7 @@
       </section>
 
       <div class="research-question" role="note" aria-label="Problema investigado">
-        <span>Problema investigado</span>
+        <span aria-hidden="true">Problema investigado</span>
         <p>Por que a câmara escura foi criada?</p>
       </div>
 
@@ -302,7 +302,7 @@
             <p id="aperture-difference">Calculando a diferença...</p>
           </div>
 
-          <div class="explanation" id="sharpness-text" role="status" aria-live="polite"></div>
+          <div class="explanation" id="sharpness-text" role="status" aria-live="polite" aria-atomic="true"></div>
 
           <details class="calculation-panel">
             <summary>Como os cálculos são feitos</summary>
@@ -332,7 +332,7 @@
             <li id="challenge-aperture"><span aria-hidden="true"></span>Orifício próximo do ideal</li>
             <li id="challenge-sharpness"><span aria-hidden="true"></span>Boa definição óptica</li>
           </ul>
-          <p id="challenge-message" role="status" aria-live="polite">Comece ajustando a iluminação.</p>
+          <p id="challenge-message" role="status" aria-live="polite" aria-atomic="true">Comece ajustando a iluminação.</p>
         </div>
       </div>
     </section>
@@ -419,7 +419,7 @@
       <h2 id="resultados-titulo">O que a experiência<br>nos mostrou.</h2>
 
       <div class="observed-result" role="note" aria-label="Principal observação do experimento">
-        <span>Principal observação</span>
+        <span aria-hidden="true">Principal observação</span>
         <p>O experimento demonstrou a <strong>propagação retilínea da luz</strong>. Os raios refletidos pelo objeto atravessaram o pequeno orifício em linha aproximadamente reta, cruzaram-se e formaram uma imagem invertida sobre a tela de papel-manteiga.</p>
       </div>
 
