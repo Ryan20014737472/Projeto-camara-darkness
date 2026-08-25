@@ -1974,10 +1974,12 @@ input[type="range"] {
   .method-image:hover img {
     transform:none;
   }
-  .project-meta div:hover,
+  .project-meta div:hover {
+    background:transparent;
+  }
   .construction-steps > li:hover,
   .settings-table > div:hover {
-    padding-inline:initial;
+    padding-inline:0;
     background:transparent;
   }
   .specific-objectives li:hover {
