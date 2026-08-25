@@ -106,10 +106,10 @@
   <main id="conteudo" tabindex="-1">
     <section class="project-context reveal" id="projeto" aria-labelledby="projeto-titulo">
       <p class="section-label">01 — Contextualização do projeto</p>
-      <div class="project-heading">
+      <header class="project-heading">
         <h2 id="projeto-titulo">Ciência, investigação<br>e experimentação.</h2>
         <p>Este trabalho faz parte do <strong>Projeto Integrador</strong> e investiga a origem e o funcionamento da câmara escura, relacionando conceitos físicos da luz, construção experimental e simulação digital.</p>
-      </div>
+      </header>
 
       <div class="project-meta" role="list" aria-label="Identificação do projeto">
         <div role="listitem"><span>Instituição</span><strong>Colégio Estadual do Paraná</strong></div>
@@ -318,14 +318,14 @@
       </div>
 
       <div class="challenge-panel" role="region" aria-labelledby="desafio-titulo">
-        <div class="challenge-heading">
+        <header class="challenge-heading">
           <div>
             <span>Desafio guiado</span>
             <h3 id="desafio-titulo">Encontre a melhor imagem</h3>
             <p>Ajuste os controles até obter exposição suficiente e um orifício próximo do valor ideal.</p>
           </div>
           <button type="button" class="sim-button challenge-button" id="start-challenge" aria-controls="challenge-progress" aria-expanded="false">Iniciar desafio</button>
-        </div>
+        </header>
         <div class="challenge-progress" id="challenge-progress" hidden>
           <ul>
             <li id="challenge-light"><span aria-hidden="true"></span>Projeção visível</li>
@@ -437,13 +437,13 @@
       </div>
 
       <div class="best-settings" role="region" aria-labelledby="melhores-configuracoes-titulo">
-        <div class="settings-heading">
+        <header class="settings-heading">
           <div>
             <h3 class="result-title" id="melhores-configuracoes-titulo">Configurações que favorecem melhores imagens</h3>
             <p>Valores e condições reunidos durante a análise do experimento.</p>
           </div>
           <span>Referência prática</span>
-        </div>
+        </header>
         <div class="settings-table" role="table" aria-label="Configurações recomendadas para a câmara escura" aria-rowcount="9" aria-colcount="2">
           <div role="row"><span role="rowheader">Comprimento da caixa</span><strong role="cell">25–35 cm</strong></div>
           <div role="row"><span role="rowheader">Diâmetro do orifício</span><strong role="cell">0,7–1 mm</strong></div>
@@ -469,11 +469,11 @@
         </div>
       </div>
 
-      <div class="conclusion">
+      <article class="conclusion" aria-labelledby="conclusao-titulo">
         <span>Conclusão</span>
-        <h3>A hipótese inicial foi confirmada.</h3>
+        <h3 id="conclusao-titulo">A hipótese inicial foi confirmada.</h3>
         <p>A câmara escura foi criada para permitir a observação e a projeção de imagens formadas pela luz dentro de um ambiente escuro. O protótipo mostrou que é possível demonstrar, de maneira simples, visual e acessível, a propagação retilínea da luz e a inversão da imagem. A comparação com o simulador também evidenciou que o modelo digital ajuda a compreender as variáveis, enquanto a experiência real revela as dificuldades de luminosidade, vedação e nitidez presentes em uma câmara física.</p>
-      </div>
+      </article>
     </section>
   </main>
 
