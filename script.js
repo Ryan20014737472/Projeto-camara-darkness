@@ -142,17 +142,26 @@ document.addEventListener("DOMContentLoaded", () => {
     !result
   ) return;
 
+  const MM_PER_CM = 10;
+  const DIFFRACTION_FACTOR = 2.44;
+  const EXPOSURE_COMPRESSION = 0.85;
   const WAVELENGTH_MM = 0.00055;
   const REFERENCE_APERTURE_MM = 0.5;
   const REFERENCE_IMAGE_DISTANCE_MM = 140;
   const REFERENCE_OBJECT_DISTANCE_MM = 2000;
   const REFERENCE_LIGHT = 0.7;
-  const DEFAULTS = {
+  const REFERENCE_FINITE_FACTOR =
+    (REFERENCE_OBJECT_DISTANCE_MM /
+      (REFERENCE_OBJECT_DISTANCE_MM + REFERENCE_IMAGE_DISTANCE_MM)) **
+    2;
+  const REFERENCE_MAGNIFICATION =
+    REFERENCE_IMAGE_DISTANCE_MM / REFERENCE_OBJECT_DISTANCE_MM;
+  const DEFAULTS = Object.freeze({
     aperture: 0.6,
     imageDistance: 12,
     objectDistance: 200,
     light: 70
-  };
+  });
 
   let challengeActive = false;
 
@@ -160,12 +169,73 @@ document.addEventListener("DOMContentLoaded", () => {
   const decimal = (value, digits = 1) => value.toFixed(digits).replace(".", ",");
 
   function calculateOptimalDiameter(imageDistanceCm, objectDistanceCm) {
-    const imageDistanceMm = imageDistanceCm * 10;
-    const objectDistanceMm = objectDistanceCm * 10;
+    const imageDistanceMm = imageDistanceCm * MM_PER_CM;
+    const objectDistanceMm = objectDistanceCm * MM_PER_CM;
+
+    // Critério u = π adotado pela referência do NIST citada no projeto.
     return Math.sqrt(
       (2 * WAVELENGTH_MM * objectDistanceMm * imageDistanceMm) /
-      (objectDistanceMm + imageDistanceMm)
+        (objectDistanceMm + imageDistanceMm)
     );
+  }
+
+  function calculateOpticalState({
+    apertureMm,
+    imageDistanceCm,
+    objectDistanceCm,
+    lightPercent
+  }) {
+    const imageDistanceMm = imageDistanceCm * MM_PER_CM;
+    const objectDistanceMm = objectDistanceCm * MM_PER_CM;
+    const lightLevel = lightPercent / 100;
+    const magnification = imageDistanceMm / objectDistanceMm;
+    const optimalDiameterMm = calculateOptimalDiameter(
+      imageDistanceCm,
+      objectDistanceCm
+    );
+
+    const geometricBlurMm = apertureMm * (1 + magnification);
+    const diffractionBlurMm =
+      (DIFFRACTION_FACTOR * WAVELENGTH_MM * imageDistanceMm) / apertureMm;
+    const totalBlurMm = Math.hypot(geometricBlurMm, diffractionBlurMm);
+
+    const referenceGeometricBlurMm =
+      optimalDiameterMm * (1 + magnification);
+    const referenceDiffractionBlurMm =
+      (DIFFRACTION_FACTOR * WAVELENGTH_MM * imageDistanceMm) /
+      optimalDiameterMm;
+    const referenceBlurMm = Math.hypot(
+      referenceGeometricBlurMm,
+      referenceDiffractionBlurMm
+    );
+    const blurRatio = totalBlurMm / referenceBlurMm;
+
+    const finiteDistanceFactor =
+      (objectDistanceMm / (objectDistanceMm + imageDistanceMm)) ** 2;
+    const relativeExposure =
+      (lightLevel / REFERENCE_LIGHT) *
+      (apertureMm / REFERENCE_APERTURE_MM) ** 2 *
+      (REFERENCE_IMAGE_DISTANCE_MM / imageDistanceMm) ** 2 *
+      (finiteDistanceFactor / REFERENCE_FINITE_FACTOR);
+
+    const displayedExposure =
+      1 - Math.exp(-EXPOSURE_COMPRESSION * relativeExposure);
+
+    return {
+      apertureMm,
+      imageDistanceCm,
+      imageDistanceMm,
+      objectDistanceCm,
+      objectDistanceMm,
+      lightPercent,
+      magnification,
+      optimalDiameterMm,
+      totalBlurMm,
+      blurRatio,
+      relativeExposure,
+      displayedExposure,
+      fNumber: imageDistanceMm / apertureMm
+    };
   }
 
   function clearPreset() {
@@ -314,58 +384,34 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateCamera() {
-    const apertureMm = Number(apertureInput.value);
-    const imageDistanceCm = Number(distanceInput.value);
-    const objectDistanceCm = Number(objectDistanceInput.value);
-    const lightPercent = Number(lightInput.value);
-
-    const imageDistanceMm = imageDistanceCm * 10;
-    const objectDistanceMm = objectDistanceCm * 10;
-    const lightLevel = lightPercent / 100;
-    const magnification = imageDistanceMm / objectDistanceMm;
-    const optimalDiameterMm = calculateOptimalDiameter(
+    const opticalState = calculateOpticalState({
+      apertureMm: Number(apertureInput.value),
+      imageDistanceCm: Number(distanceInput.value),
+      objectDistanceCm: Number(objectDistanceInput.value),
+      lightPercent: Number(lightInput.value)
+    });
+    const {
+      apertureMm,
       imageDistanceCm,
-      objectDistanceCm
-    );
+      imageDistanceMm,
+      objectDistanceCm,
+      lightPercent,
+      magnification,
+      optimalDiameterMm,
+      totalBlurMm,
+      blurRatio,
+      relativeExposure,
+      displayedExposure,
+      fNumber
+    } = opticalState;
 
-    const geometricBlurMm = apertureMm * (1 + magnification);
-    const diffractionBlurMm = (2.44 * WAVELENGTH_MM * imageDistanceMm) / apertureMm;
-    const totalBlurMm = Math.hypot(geometricBlurMm, diffractionBlurMm);
-
-    const optimalGeometricBlurMm = optimalDiameterMm * (1 + magnification);
-    const optimalDiffractionBlurMm =
-      (2.44 * WAVELENGTH_MM * imageDistanceMm) / optimalDiameterMm;
-    const minimumBlurMm = Math.hypot(
-      optimalGeometricBlurMm,
-      optimalDiffractionBlurMm
-    );
-    const blurRatio = totalBlurMm / minimumBlurMm;
-
-    const referenceFiniteFactor = Math.pow(
-      REFERENCE_OBJECT_DISTANCE_MM /
-        (REFERENCE_OBJECT_DISTANCE_MM + REFERENCE_IMAGE_DISTANCE_MM),
-      2
-    );
-    const finiteDistanceFactor = Math.pow(
-      objectDistanceMm / (objectDistanceMm + imageDistanceMm),
-      2
-    );
-    const relativeExposure =
-      (lightLevel / REFERENCE_LIGHT) *
-      Math.pow(apertureMm / REFERENCE_APERTURE_MM, 2) *
-      Math.pow(REFERENCE_IMAGE_DISTANCE_MM / imageDistanceMm, 2) *
-      (finiteDistanceFactor / referenceFiniteFactor);
-
-    const displayedExposure = 1 - Math.exp(-0.85 * relativeExposure);
     const cssBlur = clamp(0.28 + (blurRatio - 1) * 2.3, 0.28, 6);
     const cssBrightness = 0.06 + displayedExposure * 1.55;
     const cssOpacity = 0.025 + displayedExposure * 0.975;
     const rayStrength = clamp(0.025 + displayedExposure * 0.975, 0.025, 1);
     const screenGlow = clamp(displayedExposure * 0.42, 0.01, 0.42);
-    const referenceMagnification =
-      REFERENCE_IMAGE_DISTANCE_MM / REFERENCE_OBJECT_DISTANCE_MM;
     const projectionScale = clamp(
-      magnification / referenceMagnification,
+      magnification / REFERENCE_MAGNIFICATION,
       0.42,
       1.8
     );
@@ -457,8 +503,6 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (blurRatio <= 1.12) verdict = "Próxima do limite de melhor definição";
     else if (relativeExposure > 2.5) verdict = "Projeção muito luminosa";
     else if (relativeExposure < 0.3) verdict = "Projeção nítida, porém muito escura";
-
-    const fNumber = imageDistanceMm / apertureMm;
 
     result.innerHTML =
       "<strong>" +
