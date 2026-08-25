@@ -19,20 +19,58 @@ document.addEventListener("DOMContentLoaded", () => {
     revealItems.forEach((item) => observer.observe(item));
   }
 
+  function getAnchorTarget(link) {
+    const hash = link.getAttribute("href");
+    if (!hash || hash === "#" || !hash.startsWith("#")) return null;
+
+    try {
+      return document.getElementById(decodeURIComponent(hash.slice(1)));
+    } catch {
+      return null;
+    }
+  }
+
+  function focusTarget(target) {
+    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+
+    window.requestAnimationFrame(() => {
+      try {
+        target.focus({ preventScroll: true });
+      } catch {
+        target.focus();
+      }
+    });
+  }
+
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
-      const target = document.querySelector(link.getAttribute("href"));
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        link.target === "_blank"
+      ) {
+        return;
+      }
+
+      const target = getAnchorTarget(link);
       if (!target) return;
+
       event.preventDefault();
       target.scrollIntoView({
         behavior: reducedMotionQuery.matches ? "auto" : "smooth",
         block: "start"
       });
-      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
-      window.setTimeout(
-        () => target.focus({ preventScroll: true }),
-        reducedMotionQuery.matches ? 0 : 350
-      );
+      focusTarget(target);
+      setCurrentNavigation(target.id);
+
+      const hash = link.getAttribute("href");
+      if (window.location.hash !== hash) {
+        window.history.pushState(null, "", hash);
+      }
     });
   });
 
