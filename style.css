@@ -584,7 +584,8 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   color:var(--sun-pale);
   font:11px var(--font-mono);
 }
-.construction-steps h3 {
+.construction-steps h3,
+.construction-steps h4 {
   margin:0 0 7px;
   color:var(--cream);
   font-size:18px;
