@@ -1591,7 +1591,7 @@ nav {
   height:4px;
   border:1px solid #5e503d;
   border-radius:999px;
-  background:linear-gradient(90deg,#5e503d,var(--sun));
+  background:linear-gradient(90deg,var(--sun) 0 var(--range-progress,50%),#5e503d var(--range-progress,50%) 100%);
 }
 .control input[type="range"]::-webkit-slider-thumb {
   width:18px;
@@ -1608,7 +1608,7 @@ nav {
   height:4px;
   border:1px solid #5e503d;
   border-radius:999px;
-  background:linear-gradient(90deg,#5e503d,var(--sun));
+  background:linear-gradient(90deg,var(--sun) 0 var(--range-progress,50%),#5e503d var(--range-progress,50%) 100%);
 }
 .control input[type="range"]::-moz-range-thumb {
   width:14px;
