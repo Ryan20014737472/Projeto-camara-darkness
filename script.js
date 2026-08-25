@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.documentElement.classList.add("reveal-ready");
 
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const requestFrame =
+    typeof window.requestAnimationFrame === "function"
+      ? window.requestAnimationFrame.bind(window)
+      : (callback) => window.setTimeout(callback, 16);
   const revealItems = document.querySelectorAll(".reveal");
 
   if (reducedMotionQuery.matches || !("IntersectionObserver" in window)) {
@@ -38,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function focusTarget(target) {
     if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
 
-    window.requestAnimationFrame(() => {
+    requestFrame(() => {
       try {
         target.focus({ preventScroll: true });
       } catch {
@@ -210,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function scheduleCameraUpdate() {
     if (cameraFrameId) return;
 
-    cameraFrameId = window.requestAnimationFrame(() => {
+    cameraFrameId = requestFrame(() => {
       cameraFrameId = 0;
       updateCamera();
     });
