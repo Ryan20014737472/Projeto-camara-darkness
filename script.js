@@ -408,7 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
           Number(objectDistanceInput.value)
         );
         setValues({
-          aperture: clamp(Math.round(ideal * 10) / 10, 0.1, 2.5),
+          aperture: clamp(Math.round(ideal * 100) / 100, 0.1, 2.5),
           light: 70
         });
       } else if (preset === "diffraction") {
