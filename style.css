@@ -645,3 +645,21 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   .experiment-notes article,
   .photo-register { padding:22px; }
 }
+
+
+/* Esquema único da metodologia */
+.method-image {
+  margin:18px 0 0;
+  padding:18px;
+  background:#fff8ed;
+}
+.method-image img {
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:680px;
+  object-fit:contain;
+}
+@media (max-width:520px) {
+  .method-image { padding:10px; }
+}
