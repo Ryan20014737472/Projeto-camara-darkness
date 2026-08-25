@@ -43,7 +43,7 @@ body {
   font-synthesis:none;
   -webkit-font-smoothing:antialiased;
 }
-img { max-width:100%; }
+img { max-width:100%; height:auto; }
 button,
 input,
 summary { font:inherit; }
@@ -1349,6 +1349,7 @@ nav {
 }
 .nav-links {
   padding-block:7px;
+  scroll-padding-inline:18px;
   scroll-snap-type:x proximity;
 }
 .nav-links a {
@@ -1529,6 +1530,7 @@ nav {
   box-shadow:0 0 0 3px rgba(245,185,66,.12);
 }
 .camera-stage {
+  contain:layout paint;
   border-color:#5d4e39;
   border-radius:var(--radius-sm);
   background:
@@ -1556,6 +1558,7 @@ nav {
     0 14px 34px rgba(0,0,0,.3);
 }
 .scene.projection {
+  will-change:filter,transform,opacity;
   background-size:cover;
   box-shadow:0 0 24px rgba(245,185,66,.08);
 }
@@ -1960,6 +1963,16 @@ input[type="range"] {
   border-bottom-color:#5b4d3a;
   background:rgba(245,185,66,.035);
   color:var(--sun-pale);
+}
+.project-meta strong,
+.team-list li,
+.settings-table strong {
+  overflow-wrap:anywhere;
+}
+.sim-button,
+.button,
+.calculation-panel summary {
+  user-select:none;
 }
 
 @media (hover:none) {
