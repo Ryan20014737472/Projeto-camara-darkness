@@ -1134,3 +1134,146 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   .comparison-labels { gap:10px; }
   .challenge-button { width:100%; }
 }
+
+
+/* Acessibilidade e acabamento responsivo */
+body { overflow-x:hidden; }
+[id] { scroll-margin-top:24px; }
+main:focus { outline:none; }
+.skip-link {
+  position:fixed;
+  top:12px;
+  left:12px;
+  z-index:1000;
+  padding:12px 16px;
+  border:2px solid var(--sun);
+  background:var(--ink);
+  color:var(--paper);
+  font:12px "DM Mono",monospace;
+  text-decoration:none;
+  text-transform:uppercase;
+  transform:translateY(-160%);
+  transition:transform .18s ease;
+}
+.skip-link:focus { transform:translateY(0); }
+.nav-links a[aria-current="location"] {
+  color:var(--sun);
+  opacity:1;
+  text-decoration:underline;
+  text-decoration-thickness:2px;
+  text-underline-offset:6px;
+}
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+[tabindex="-1"]:focus-visible {
+  outline:3px solid var(--sun);
+  outline-offset:4px;
+}
+.button:focus-visible,
+.nav-links a:focus-visible,
+.sim-button:focus-visible {
+  outline:3px solid var(--sun);
+  outline-offset:4px;
+}
+.control input:focus-visible {
+  border-radius:8px;
+  outline-offset:5px;
+}
+.references a,
+.calculation-content code,
+.settings-table strong,
+.measurement-note,
+.method-image img {
+  overflow-wrap:anywhere;
+}
+.references a {
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+}
+.sim-button,
+.button,
+nav a,
+.calculation-panel summary {
+  -webkit-tap-highlight-color:rgba(245,185,66,.25);
+}
+.method-image img {
+  background:#f5f0e7;
+}
+
+@media (hover:none) and (pointer:coarse) {
+  .sim-button,
+  .button {
+    min-height:44px;
+  }
+  .nav-links a {
+    display:inline-flex;
+    align-items:center;
+    min-height:44px;
+  }
+  .control input { min-height:32px; }
+}
+
+@media (max-width:600px) {
+  .hero {
+    min-height:100svh;
+    padding-inline:20px;
+  }
+  section { padding-inline:20px; }
+  .hero-content { padding-top:52px; }
+  .hero-text { max-width:34rem; }
+  .controls { padding:20px; }
+  .control label {
+    align-items:flex-start;
+    gap:10px;
+    line-height:1.45;
+  }
+  .control output {
+    flex:0 0 auto;
+    text-align:right;
+  }
+  .simulator-layout { gap:24px; }
+  .camera-caption {
+    align-items:center;
+    line-height:1.35;
+  }
+  .references ol { padding-left:22px; }
+  .references li { padding-right:0; }
+  .result-metrics { gap:6px; }
+  .method-image { margin-inline:-4px; }
+}
+
+@media (max-width:390px) {
+  h1 { font-size:clamp(58px,23vw,82px); }
+  h2 { font-size:clamp(36px,13vw,52px); }
+  .hero { padding-inline:16px; }
+  section { padding-inline:16px; }
+  .simulator-toolbar,
+  .controls,
+  .challenge-panel { margin-inline:-2px; }
+  .camera-stage { min-height:280px; }
+  .camera-caption { font-size:8px; letter-spacing:.035em; }
+  .camera-caption span:nth-child(2) { text-align:center; }
+  .camera-caption span:last-child { text-align:right; }
+  .comparison-labels { font-size:8px; }
+  .team-list li { width:100%; }
+  .result-metrics { grid-template-columns:1fr; }
+  .calculation-panel summary { line-height:1.45; }
+}
+
+@media (forced-colors:active) {
+  .sim-button,
+  .button,
+  .controls,
+  .camera-stage,
+  .aperture-comparison,
+  .calculation-panel {
+    border:1px solid ButtonText;
+  }
+  .status-dot,
+  .aperture-hole,
+  .challenge-progress li.done > span {
+    background:Highlight;
+  }
+}
