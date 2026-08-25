@@ -75,9 +75,17 @@ h2 { font:600 clamp(40px,6vw,76px)/.95 var(--font-display); letter-spacing:-.045
 .intro-grid p { font-size:18px; line-height:1.6; color:#50483f; margin:0; }
 .principle { background:var(--paper-deep); }
 footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0; display:flex; justify-content:space-between; font:12px var(--font-mono); text-transform:uppercase; letter-spacing:.08em; }
-.reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease,transform .7s ease; }
-.reveal.visible { opacity:1; transform:none; }
-@media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .reveal { opacity:1; transform:none; transition:none; } }
+.reveal { opacity:1; transform:none; }
+.reveal-ready .reveal {
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal-ready .reveal.visible { opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  .reveal-ready .reveal { opacity:1; transform:none; transition:none; }
+}
 @media (max-width:750px) {
   .aperture { opacity:.45; right:-5vw; }
   .intro-grid { grid-template-columns:1fr; }
