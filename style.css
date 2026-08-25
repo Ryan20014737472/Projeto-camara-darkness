@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 :root {
   --ink:#13110e;
   --ink-soft:#211d17;
@@ -25,6 +23,9 @@
   --radius-xs:2px;
   --radius-sm:4px;
   --ease-out:cubic-bezier(.2,.75,.25,1);
+  --font-display:"Playfair Display",Georgia,serif;
+  --font-body:"Space Grotesk",Inter,system-ui,-apple-system,sans-serif;
+  --font-mono:"DM Mono","Courier New",monospace;
 }
 *,
 *::before,
@@ -38,7 +39,7 @@ body {
   margin:0;
   background:var(--paper);
   color:var(--ink);
-  font-family:"Space Grotesk",sans-serif;
+  font-family:var(--font-body);
   font-synthesis:none;
   -webkit-font-smoothing:antialiased;
 }
@@ -51,29 +52,29 @@ summary { font:inherit; }
   color:var(--ink);
 }
 .hero { min-height:100vh; position:relative; overflow:hidden; padding:28px clamp(24px,6vw,96px) 56px; background:var(--ink); color:var(--paper); display:flex; flex-direction:column; }
-nav { display:flex; align-items:center; justify-content:space-between; text-transform:uppercase; letter-spacing:.12em; font-family:"DM Mono",monospace; font-size:12px; z-index:2; }
+nav { display:flex; align-items:center; justify-content:space-between; text-transform:uppercase; letter-spacing:.12em; font-family:var(--font-mono); font-size:12px; z-index:2; }
 .brand { display:flex; align-items:center; gap:10px; }
 .brand-mark { width:26px; height:26px; border:1px solid var(--sun); border-radius:50%; position:relative; }
 .brand-mark::after { content:""; width:5px; height:5px; background:var(--sun); border-radius:50%; position:absolute; inset:9px; }
 nav a { color:var(--paper); text-decoration:none; opacity:.75; }
 .hero-content { margin:auto 0; z-index:2; max-width:850px; padding-top:72px; }
-.eyebrow,.section-label { font:12px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.16em; margin:0 0 20px; }
+.eyebrow,.section-label { font:12px var(--font-mono); text-transform:uppercase; letter-spacing:.16em; margin:0 0 20px; }
 .eyebrow { color:var(--sun); }
-h1 { font:600 clamp(68px,12vw,168px)/.82 "Playfair Display",serif; letter-spacing:-.075em; margin:0; }
+h1 { font:600 clamp(68px,12vw,168px)/.82 var(--font-display); letter-spacing:-.075em; margin:0; }
 h1 em { color:var(--sun); font-weight:600; }
 .hero-text { max-width:445px; font-size:clamp(16px,2vw,20px); line-height:1.5; margin:34px 0; color:#d7cfc3; }
-.button { display:inline-flex; align-items:center; gap:12px; padding:14px 20px; border:1px solid var(--sun); color:var(--sun); background:transparent; text-decoration:none; font:12px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.08em; cursor:pointer; transition:.25s; }
+.button { display:inline-flex; align-items:center; gap:12px; padding:14px 20px; border:1px solid var(--sun); color:var(--sun); background:transparent; text-decoration:none; font:12px var(--font-mono); text-transform:uppercase; letter-spacing:.08em; cursor:pointer; transition:.25s; }
 .button:hover,.button:focus-visible { background:var(--sun); color:var(--ink); outline:none; }
 .beam { position:absolute; width:75vw; height:75vw; top:-35vw; right:-30vw; background:conic-gradient(from 225deg,transparent 0deg,transparent 24deg,rgba(245,185,66,.18) 25deg,rgba(245,185,66,.03) 56deg,transparent 57deg); transform:rotate(12deg); }
 .aperture { position:absolute; width:min(35vw,430px); aspect-ratio:1; border-radius:50%; right:9vw; bottom:8vh; border:1px solid rgba(245,185,66,.45); box-shadow:0 0 0 32px rgba(245,185,66,.03),0 0 90px rgba(245,185,66,.12); }
 .aperture::after { content:""; position:absolute; width:11px; height:11px; background:var(--sun); border-radius:50%; top:calc(50% - 5px); left:calc(50% - 5px); }
 section { padding:100px clamp(24px,11vw,180px); }
 .section-label { color:var(--rust-dark); margin-bottom:28px; }
-h2 { font:600 clamp(40px,6vw,76px)/.95 "Playfair Display",serif; letter-spacing:-.045em; margin:0; max-width:760px; }
+h2 { font:600 clamp(40px,6vw,76px)/.95 var(--font-display); letter-spacing:-.045em; margin:0; max-width:760px; }
 .intro-grid { display:grid; grid-template-columns:1fr 1fr; gap:9vw; align-items:end; }
 .intro-grid p { font-size:18px; line-height:1.6; color:#50483f; margin:0; }
 .principle { background:var(--paper-deep); }
-footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0; display:flex; justify-content:space-between; font:12px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.08em; }
+footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0; display:flex; justify-content:space-between; font:12px var(--font-mono); text-transform:uppercase; letter-spacing:.08em; }
 .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease,transform .7s ease; }
 .reveal.visible { opacity:1; transform:none; }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .reveal { opacity:1; transform:none; transition:none; } }
@@ -95,11 +96,11 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .screen { position:absolute; right:26px; top:24px; bottom:24px; width:31%; min-width:150px; display:grid; place-items:center; overflow:hidden; border:1px solid rgba(255,248,237,.35); background:linear-gradient(135deg,#e8e2c8,#777062); }
 .projection { width:76%; height:76%; transform:scaleX(-1) scaleY(-1) scale(var(--projection)); transform-origin:center; filter:brightness(var(--light)) blur(var(--focus)); transition:filter .18s ease,transform .18s ease; }
 .status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--sun-pale); margin-right:8px; box-shadow:0 0 10px var(--sun-pale); }
-.camera-caption { display:flex; justify-content:space-between; gap:12px; padding:12px 2px 0; color:#cfc4b4; font:11px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.07em; }
+.camera-caption { display:flex; justify-content:space-between; gap:12px; padding:12px 2px 0; color:#cfc4b4; font:11px var(--font-mono); text-transform:uppercase; letter-spacing:.07em; }
 .controls { padding:24px; background:#211d17; border:1px solid var(--line-dark); }
-.controls h3 { font:600 28px "Playfair Display",serif; margin:0 0 24px; }
+.controls h3 { font:600 28px var(--font-display); margin:0 0 24px; }
 .control { margin:0 0 25px; }
-.control label { display:flex; justify-content:space-between; font:12px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.06em; color:#eee1cd; margin-bottom:12px; }
+.control label { display:flex; justify-content:space-between; font:12px var(--font-mono); text-transform:uppercase; letter-spacing:.06em; color:#eee1cd; margin-bottom:12px; }
 .control output { color:var(--sun-pale); }
 .control input { width:100%; accent-color:var(--sun); }
 .explanation { padding:16px 0 0; border-top:1px solid #554837; color:var(--copy-dark); line-height:1.55; font-size:14px; }
@@ -169,7 +170,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .physics-note {
   margin:-16px 0 24px;
   color:var(--label-dark);
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   letter-spacing:.08em;
   text-transform:uppercase;
 }
@@ -187,7 +188,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   background:var(--panel);
   border:1px solid #443a2c;
   color:var(--sun-pale);
-  font:12px "DM Mono",monospace;
+  font:12px var(--font-mono);
 }
 .result-metrics b {
   color:var(--label-dark);
@@ -223,7 +224,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .theory-card h3 {
   margin:38px 0 14px;
-  font:600 30px "Playfair Display",serif;
+  font:600 30px var(--font-display);
 }
 .theory-card > p {
   margin:0;
@@ -239,7 +240,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .formula span {
   display:block;
   overflow-wrap:anywhere;
-  font:500 clamp(18px,2.5vw,28px) "DM Mono",monospace;
+  font:500 clamp(18px,2.5vw,28px) var(--font-mono);
 }
 .formula small {
   display:block;
@@ -266,7 +267,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .theory-link-title,
 .references-title {
   margin:0 0 8px;
-  font:600 20px "Playfair Display",serif;
+  font:600 20px var(--font-display);
 }
 .theory-link p:last-child {
   margin:0;
@@ -353,7 +354,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .project-meta span,
 .research-question > span {
   color:var(--rust-dark);
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   letter-spacing:.1em;
   text-transform:uppercase;
 }
@@ -365,7 +366,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .context-title {
   margin:0 0 16px;
-  font:600 24px "Playfair Display",serif;
+  font:600 24px var(--font-display);
 }
 .team-list {
   display:flex;
@@ -379,7 +380,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   padding:10px 14px;
   border:1px solid var(--line);
   background:#ebe3d7;
-  font:12px "DM Mono",monospace;
+  font:12px var(--font-mono);
 }
 .research-question {
   margin-top:38px;
@@ -390,7 +391,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .research-question p {
   max-width:940px;
   margin:18px 0 0;
-  font:600 clamp(27px,4vw,48px)/1.08 "Playfair Display",serif;
+  font:600 clamp(27px,4vw,48px)/1.08 var(--font-display);
   letter-spacing:-.025em;
 }
 .context-grid {
@@ -407,7 +408,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .context-card h3 {
   margin:42px 0 14px;
-  font:600 29px "Playfair Display",serif;
+  font:600 29px var(--font-display);
 }
 .context-card p {
   margin:0;
@@ -442,7 +443,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   top:18px;
   left:0;
   color:var(--rust-dark);
-  font:11px "DM Mono",monospace;
+  font:11px var(--font-mono);
 }
 @media (max-width:750px) {
   .project-heading,
@@ -491,7 +492,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .method-title {
   margin:0 0 20px;
-  font:600 25px "Playfair Display",serif;
+  font:600 25px var(--font-display);
 }
 .materials-list {
   display:grid;
@@ -538,11 +539,11 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .measurement-grid span {
   color:#6d5c4d;
-  font:9px "DM Mono",monospace;
+  font:9px var(--font-mono);
   letter-spacing:.06em;
   text-transform:uppercase;
 }
-.measurement-grid strong { font:500 17px "DM Mono",monospace; }
+.measurement-grid strong { font:500 17px var(--font-mono); }
 .measurement-note {
   margin:18px 0 0;
   color:#7d6e61;
@@ -573,7 +574,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .construction-steps > li > span {
   padding-top:4px;
   color:var(--sun-pale);
-  font:11px "DM Mono",monospace;
+  font:11px var(--font-mono);
 }
 .construction-steps h3 {
   margin:0 0 7px;
@@ -652,14 +653,14 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .observed-result > span,
 .conclusion > span {
   color:var(--sun);
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   letter-spacing:.1em;
   text-transform:uppercase;
 }
 .observed-result p {
   max-width:920px;
   margin:18px 0 0;
-  font:600 clamp(25px,3.6vw,44px)/1.12 "Playfair Display",serif;
+  font:600 clamp(25px,3.6vw,44px)/1.12 var(--font-display);
 }
 .comparison-grid {
   display:grid;
@@ -675,7 +676,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .comparison-grid h3 {
   margin:40px 0 14px;
-  font:600 30px "Playfair Display",serif;
+  font:600 30px var(--font-display);
 }
 .comparison-grid p {
   margin:0;
@@ -695,7 +696,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .result-title {
   margin:0 0 7px;
-  font:600 25px "Playfair Display",serif;
+  font:600 25px var(--font-display);
 }
 .settings-heading p:last-child {
   margin:0;
@@ -703,7 +704,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .settings-heading > span {
   color:var(--rust-dark);
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   letter-spacing:.08em;
   text-transform:uppercase;
 }
@@ -758,7 +759,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .conclusion h3 {
   max-width:850px;
   margin:20px 0;
-  font:600 clamp(36px,5vw,64px)/1 "Playfair Display",serif;
+  font:600 clamp(36px,5vw,64px)/1 var(--font-display);
   letter-spacing:-.035em;
 }
 .conclusion p {
@@ -797,7 +798,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   display:block;
   margin-bottom:10px;
   color:#9f927f;
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   letter-spacing:.09em;
   text-transform:uppercase;
 }
@@ -812,7 +813,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   border:1px solid #66563e;
   background:var(--panel);
   color:#e9ddca;
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   letter-spacing:.06em;
   text-transform:uppercase;
   cursor:pointer;
@@ -892,7 +893,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   justify-content:space-between;
   gap:18px;
   color:var(--label-dark);
-  font:9px "DM Mono",monospace;
+  font:9px var(--font-mono);
   letter-spacing:.05em;
   text-transform:uppercase;
 }
@@ -949,7 +950,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   position:relative;
   padding:15px 42px 15px 15px;
   color:var(--sun-pale);
-  font:11px "DM Mono",monospace;
+  font:11px var(--font-mono);
   letter-spacing:.05em;
   text-transform:uppercase;
   cursor:pointer;
@@ -979,7 +980,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 .calculation-content strong { color:var(--cream-bright); }
 .calculation-content code {
   color:var(--sun-pale);
-  font-family:"DM Mono",monospace;
+  font-family:var(--font-mono);
 }
 .calculation-content .calculation-note {
   padding-top:12px;
@@ -1002,14 +1003,14 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
 }
 .challenge-heading span {
   color:var(--sun-pale);
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   letter-spacing:.1em;
   text-transform:uppercase;
 }
 .challenge-heading h3 {
   margin:8px 0 7px;
   color:var(--cream-bright);
-  font:600 30px "Playfair Display",serif;
+  font:600 30px var(--font-display);
 }
 .challenge-heading p {
   max-width:650px;
@@ -1042,7 +1043,7 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   padding:12px;
   border:1px solid var(--line-dark);
   color:#928572;
-  font:10px "DM Mono",monospace;
+  font:10px var(--font-mono);
   line-height:1.4;
   text-transform:uppercase;
   transition:border-color .18s ease,color .18s ease,background .18s ease;
@@ -1118,7 +1119,7 @@ main:focus { outline:none; }
   border:2px solid var(--sun);
   background:var(--ink);
   color:var(--paper);
-  font:12px "DM Mono",monospace;
+  font:12px var(--font-mono);
   text-decoration:none;
   text-transform:uppercase;
   transform:translateY(-160%);
@@ -1280,7 +1281,7 @@ section {
 .num {
   display:inline-grid;
   color:var(--rust-dark);
-  font:12px "DM Mono",monospace;
+  font:12px var(--font-mono);
   min-width:28px;
   min-height:28px;
   place-items:center;
