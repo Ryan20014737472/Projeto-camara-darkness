@@ -3,7 +3,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.documentElement.classList.add("reveal-ready");
 
-  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const reducedMotionQuery =
+    typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : { matches: false };
   const requestFrame =
     typeof window.requestAnimationFrame === "function"
       ? window.requestAnimationFrame.bind(window)
@@ -78,14 +81,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const hash = link.getAttribute("href");
       if (window.location.hash !== hash) {
-        window.history.pushState(null, "", hash);
+        if (window.history && typeof window.history.pushState === "function") {
+          window.history.pushState(null, "", hash);
+        } else {
+          window.location.hash = hash;
+        }
       }
     });
   });
 
   const navigationLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
   const navigationTargets = navigationLinks
-    .map((link) => document.querySelector(link.getAttribute("href")))
+    .map(getAnchorTarget)
     .filter(Boolean);
 
   function setCurrentNavigation(targetId) {
@@ -340,6 +347,28 @@ document.addEventListener("DOMContentLoaded", () => {
     input.value = String(clamp(numericValue, minimum, maximum));
   }
 
+  function readSimulatorValues() {
+    const values = {
+      apertureMm: Number(apertureInput.value),
+      imageDistanceCm: Number(distanceInput.value),
+      objectDistanceCm: Number(objectDistanceInput.value),
+      lightPercent: Number(lightInput.value)
+    };
+    const numericValues = Object.values(values);
+
+    if (
+      numericValues.some((value) => !Number.isFinite(value)) ||
+      values.apertureMm <= 0 ||
+      values.imageDistanceCm <= 0 ||
+      values.objectDistanceCm <= 0 ||
+      values.lightPercent < 0
+    ) {
+      return null;
+    }
+
+    return values;
+  }
+
   function setValues(values) {
     if (values.aperture !== undefined) {
       setInputValue(apertureInput, values.aperture);
@@ -455,6 +484,7 @@ document.addEventListener("DOMContentLoaded", () => {
     [challengeLight, challengeAperture, challengeSharpness].forEach((item) =>
       markChallengeItem(item, false)
     );
+    setTextIfChanged(challengeMessage, "Comece ajustando a iluminação.");
     if (challengeButton) {
       challengeButton.textContent = "Iniciar desafio";
       challengeButton.setAttribute("aria-expanded", "false");
@@ -516,12 +546,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateCamera() {
-    const opticalState = calculateOpticalState({
-      apertureMm: Number(apertureInput.value),
-      imageDistanceCm: Number(distanceInput.value),
-      objectDistanceCm: Number(objectDistanceInput.value),
-      lightPercent: Number(lightInput.value)
-    });
+    const simulatorValues = readSimulatorValues();
+    if (!simulatorValues) {
+      result.setAttribute("aria-busy", "false");
+      setTextIfChanged(
+        result,
+        "Não foi possível calcular a projeção. Restaure os valores do simulador."
+      );
+      return;
+    }
+
+    const opticalState = calculateOpticalState(simulatorValues);
     const {
       apertureMm,
       imageDistanceCm,
