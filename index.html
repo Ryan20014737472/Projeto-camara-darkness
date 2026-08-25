@@ -156,18 +156,41 @@
     <section class="simulator reveal" id="simulador">
       <p class="section-label">04 — Laboratório interativo</p>
       <h2>Controle a luz.<br>Observe a imagem.</h2>
-      <div class="simulator-layout">
+
+      <div class="simulator-toolbar">
         <div>
-          <div class="camera-stage" aria-label="Simulação de uma câmara escura">
+          <span class="toolbar-label">Configurações prontas</span>
+          <div class="preset-buttons" role="group" aria-label="Configurações prontas do simulador">
+            <button type="button" class="sim-button preset-button" data-preset="ideal">Orifício ideal</button>
+            <button type="button" class="sim-button preset-button" data-preset="diffraction">Difração</button>
+            <button type="button" class="sim-button preset-button" data-preset="blur">Muito desfoque</button>
+          </div>
+        </div>
+        <button type="button" class="sim-button reset-button" id="reset-simulator">Restaurar valores</button>
+      </div>
+
+      <div class="simulator-layout">
+        <div class="visual-column">
+          <div class="camera-stage" aria-label="Simulação de uma câmara escura com raios luminosos dinâmicos">
             <div class="scene" aria-label="Fachada do Colégio Estadual do Paraná"></div>
-            <div class="ray ray-one"></div><div class="ray ray-two"></div>
+            <svg class="ray-diagram" viewBox="0 0 1000 430" preserveAspectRatio="none" aria-hidden="true">
+              <line id="ray-source-top" x1="180" y1="115" x2="520" y2="215"></line>
+              <line id="ray-image-bottom" x1="520" y1="215" x2="830" y2="315"></line>
+              <line id="ray-source-bottom" x1="180" y1="315" x2="520" y2="215"></line>
+              <line id="ray-image-top" x1="520" y1="215" x2="830" y2="115"></line>
+            </svg>
             <div class="aperture-wall"><div class="aperture-hole"></div></div>
             <div class="screen" aria-label="Tela de projeção">
               <div class="scene projection" aria-label="Projeção invertida do Colégio Estadual do Paraná"></div>
             </div>
           </div>
-          <div class="camera-caption"><span><i class="status-dot"></i>Objeto iluminado</span><span>orifício</span><span>imagem invertida</span></div>
+          <div class="camera-caption">
+            <span><i class="status-dot"></i>Objeto iluminado</span>
+            <span>orifício</span>
+            <span>imagem invertida</span>
+          </div>
         </div>
+
         <aside class="controls" aria-label="Controles da simulação">
           <h3>Ajustes físicos</h3>
           <p class="physics-note">Modelo paraxial • luz de 550 nm</p>
@@ -187,8 +210,51 @@
             <label for="light-control">Iluminação do objeto <output id="light-value">70%</output></label>
             <input id="light-control" type="range" min="10" max="100" step="5" value="70">
           </div>
+
+          <div class="aperture-comparison" aria-label="Comparação entre o orifício escolhido e o ideal">
+            <div class="comparison-labels">
+              <span>Escolhido <strong id="chosen-aperture">0,60 mm</strong></span>
+              <span>Ideal <strong id="ideal-aperture">0,35 mm</strong></span>
+            </div>
+            <div class="comparison-track" aria-hidden="true">
+              <i class="chosen-marker" id="chosen-marker"></i>
+              <i class="ideal-marker" id="ideal-marker"></i>
+            </div>
+            <p id="aperture-difference">Calculando a diferença...</p>
+          </div>
+
           <div class="explanation" id="sharpness-text" role="status" aria-live="polite"></div>
+
+          <details class="calculation-panel">
+            <summary>Como os cálculos são feitos</summary>
+            <div class="calculation-content">
+              <p><strong>Ampliação:</strong> <code>m = v / u</code>. A distância da tela dividida pela distância do objeto define o tamanho da projeção.</p>
+              <p><strong>Orifício ideal:</strong> <code>d = √[2λuv / (u + v)]</code>. O valor equilibra borrão geométrico e difração.</p>
+              <p><strong>Difração:</strong> <code>B = 2,44λv / d</code>. Um orifício pequeno demais espalha a luz.</p>
+              <p><strong>Exposição:</strong> cresce com a área do orifício e diminui aproximadamente com o quadrado da distância da tela.</p>
+              <p class="calculation-note">O modelo usa λ = 550 nm e comprime a faixa de brilho apenas para representá-la no monitor.</p>
+            </div>
+          </details>
         </aside>
+      </div>
+
+      <div class="challenge-panel">
+        <div class="challenge-heading">
+          <div>
+            <span>Desafio guiado</span>
+            <h3>Encontre a melhor imagem</h3>
+            <p>Ajuste os controles até obter exposição suficiente e um orifício próximo do valor ideal.</p>
+          </div>
+          <button type="button" class="sim-button challenge-button" id="start-challenge">Iniciar desafio</button>
+        </div>
+        <div class="challenge-progress" id="challenge-progress" hidden>
+          <ul>
+            <li id="challenge-light"><span></span>Projeção visível</li>
+            <li id="challenge-aperture"><span></span>Orifício próximo do ideal</li>
+            <li id="challenge-sharpness"><span></span>Boa definição óptica</li>
+          </ul>
+          <p id="challenge-message" role="status" aria-live="polite">Comece ajustando a iluminação.</p>
+        </div>
       </div>
     </section>
 
