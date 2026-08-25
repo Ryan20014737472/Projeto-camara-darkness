@@ -622,7 +622,14 @@ footer { padding:35px clamp(24px,6vw,96px); background:var(--ink); color:#b7ada0
   color:#6c5f53;
   font-size:12px;
 }
-.nav-links { white-space:nowrap; }
+.nav-links {
+  min-width:0;
+  white-space:nowrap;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:none;
+}
+.nav-links::-webkit-scrollbar { display:none; }
 @media (max-width:750px) {
   .method-overview,
   .experiment-notes,
