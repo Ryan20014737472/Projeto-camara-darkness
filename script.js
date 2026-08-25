@@ -199,6 +199,24 @@ document.addEventListener("DOMContentLoaded", () => {
     objectDistance: 200,
     light: 30
   });
+  const THRESHOLDS = Object.freeze({
+    exposureInvisible: 0.08,
+    exposureVisible: 0.3,
+    exposureWellLit: 0.75,
+    exposureTooBright: 2.5,
+    blurBest: 1.12,
+    blurSharp: 1.45,
+    blurSoft: 2.3,
+    challengeBlur: 1.25,
+    comparisonDeviation: 0.12,
+    challengeDeviation: 0.15,
+    apertureSmallFactor: 0.78,
+    apertureLargeFactor: 1.32,
+    magnificationSmall: 0.04,
+    magnificationLarge: 0.12,
+    lightLowPercent: 35,
+    lightStrongPercent: 70
+  });
 
   let challengeActive = false;
   let cameraFrameId = 0;
@@ -396,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const signedDifference = (apertureMm - optimalDiameterMm) / optimalDiameterMm;
     const differencePercent = Math.abs(signedDifference) * 100;
 
-    if (differencePercent <= 12) {
+    if (differencePercent <= THRESHOLDS.comparisonDeviation * 100) {
       setTextIfChanged(
         differenceText,
         "O valor escolhido está na faixa ideal para estas distâncias."
@@ -446,12 +464,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateChallenge(state) {
     if (!challengeActive || !challengeProgress) return;
 
-    const visible = state.relativeExposure >= 0.3;
+    const visible = state.relativeExposure >= THRESHOLDS.exposureVisible;
     const nearIdeal =
       Math.abs(state.apertureMm - state.optimalDiameterMm) /
         state.optimalDiameterMm <=
-      0.15;
-    const sharp = state.blurRatio <= 1.25;
+      THRESHOLDS.challengeDeviation;
+    const sharp = state.blurRatio <= THRESHOLDS.challengeBlur;
 
     markChallengeItem(challengeLight, visible);
     markChallengeItem(challengeAperture, nearIdeal);
@@ -557,37 +575,37 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     const brightnessDescription =
-      relativeExposure < 0.08
+      relativeExposure < THRESHOLDS.exposureInvisible
         ? "quase invisível"
-        : relativeExposure < 0.3
+        : relativeExposure < THRESHOLDS.exposureVisible
           ? "muito escura"
-          : relativeExposure < 0.75
+          : relativeExposure < THRESHOLDS.exposureWellLit
             ? "escura"
-            : relativeExposure < 2.5
+            : relativeExposure < THRESHOLDS.exposureTooBright
               ? "bem exposta"
               : "muito luminosa";
 
     const sharpnessDescription =
-      blurRatio <= 1.12
+      blurRatio <= THRESHOLDS.blurBest
         ? "próxima da melhor definição possível"
-        : blurRatio <= 1.45
+        : blurRatio <= THRESHOLDS.blurSharp
           ? "nítida"
-          : blurRatio <= 2.3
+          : blurRatio <= THRESHOLDS.blurSoft
             ? "suave"
             : "borrada";
 
     const sizeDescription =
-      magnification < 0.04
+      magnification < THRESHOLDS.magnificationSmall
         ? "pequena"
-        : magnification < 0.12
+        : magnification < THRESHOLDS.magnificationLarge
           ? "média"
           : "grande";
 
     let apertureExplanation;
-    if (apertureMm < optimalDiameterMm * 0.78) {
+    if (apertureMm < optimalDiameterMm * THRESHOLDS.apertureSmallFactor) {
       apertureExplanation =
         "O orifício está menor que o ideal: entra pouca luz e a difração passa a espalhar os detalhes.";
-    } else if (apertureMm > optimalDiameterMm * 1.32) {
+    } else if (apertureMm > optimalDiameterMm * THRESHOLDS.apertureLargeFactor) {
       apertureExplanation =
         "O orifício está maior que o ideal: entra mais luz, mas cada ponto forma um círculo geométrico maior.";
     } else {
@@ -605,18 +623,24 @@ document.addEventListener("DOMContentLoaded", () => {
       "×; afastar a tela aumenta a imagem e reduz a irradiância.";
 
     const lightExplanation =
-      lightPercent < 35
+      lightPercent < THRESHOLDS.lightLowPercent
         ? "A iluminação fraca do objeto limita a visibilidade da projeção."
-        : lightPercent < 70
+        : lightPercent < THRESHOLDS.lightStrongPercent
           ? "A iluminação média produz uma projeção útil se a abertura não for muito pequena."
           : "A iluminação forte aumenta a exposição, mas não corrige o desfoque óptico.";
 
     let verdict = "Configuração fisicamente equilibrada";
-    if (relativeExposure < 0.08) verdict = "Projeção quase invisível";
-    else if (blurRatio > 2.3) verdict = "Projeção visível, mas desfocada";
-    else if (blurRatio <= 1.12) verdict = "Próxima do limite de melhor definição";
-    else if (relativeExposure > 2.5) verdict = "Projeção muito luminosa";
-    else if (relativeExposure < 0.3) verdict = "Projeção nítida, porém muito escura";
+    if (relativeExposure < THRESHOLDS.exposureInvisible) {
+      verdict = "Projeção quase invisível";
+    } else if (blurRatio > THRESHOLDS.blurSoft) {
+      verdict = "Projeção visível, mas desfocada";
+    } else if (blurRatio <= THRESHOLDS.blurBest) {
+      verdict = "Próxima do limite de melhor definição";
+    } else if (relativeExposure > THRESHOLDS.exposureTooBright) {
+      verdict = "Projeção muito luminosa";
+    } else if (relativeExposure < THRESHOLDS.exposureVisible) {
+      verdict = "Projeção nítida, porém muito escura";
+    }
 
     const metrics = [
       ["Ampliação", decimal(magnification, 3) + "×"],
