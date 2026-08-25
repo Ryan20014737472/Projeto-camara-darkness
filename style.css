@@ -2097,3 +2097,51 @@ input[type="range"] {
     break-before:page;
   }
 }
+
+/* Áreas seguras de celulares com recorte e controles em alto contraste */
+@media (max-width:600px) {
+  @supports (padding:max(0px)) {
+    .hero,
+    section {
+      padding-left:max(20px,env(safe-area-inset-left));
+      padding-right:max(20px,env(safe-area-inset-right));
+    }
+    footer {
+      padding-right:max(20px,env(safe-area-inset-right));
+      padding-bottom:max(35px,env(safe-area-inset-bottom));
+      padding-left:max(20px,env(safe-area-inset-left));
+    }
+    .skip-link {
+      left:max(12px,env(safe-area-inset-left));
+    }
+  }
+}
+@media (max-width:390px) {
+  @supports (padding:max(0px)) {
+    .hero,
+    section {
+      padding-left:max(16px,env(safe-area-inset-left));
+      padding-right:max(16px,env(safe-area-inset-right));
+    }
+  }
+}
+@media (max-height:560px) and (orientation:landscape) {
+  @supports (padding:max(0px)) {
+    .hero,
+    section,
+    footer {
+      padding-left:max(6vw,env(safe-area-inset-left));
+      padding-right:max(6vw,env(safe-area-inset-right));
+    }
+  }
+}
+@media (forced-colors:active) {
+  .control input[type="range"] {
+    appearance:auto;
+    -webkit-appearance:auto;
+  }
+  .scene.projection {
+    opacity:1;
+    filter:none;
+  }
+}
