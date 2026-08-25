@@ -5,19 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Projeto Integrador — Câmara Escura">
   <title>Câmara Escura | Projeto Integrador</title>
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
   <script src="script.js" defer></script>
 </head>
 <body>
   <header class="hero" id="inicio">
     <nav>
       <a class="brand" href="#inicio" aria-label="Voltar ao início"><span class="brand-mark"></span><span>Projeto Integrador</span></a>
-      <div class="nav-links">
-        <a href="#projeto">Projeto</a>
-        <a href="#fundamentacao">Fundamentação</a>
+      <div class="nav-links" aria-label="Navegação principal">
+        <a href="#inicio">Início</a>
+        <a href="#sobre">Conceito</a>
         <a href="#simulador">Simulador</a>
-        <a href="#metodologia">Metodologia</a>
-        <a href="#resultados">Resultados ↓</a>
+        <a href="#metodologia">Experimento</a>
+        <a href="#resultados">Resultados</a>
+        <a href="#equipe">Equipe</a>
+        <a href="#referencias">Referências</a>
       </div>
     </nav>
     <div class="beam"></div>
@@ -44,7 +46,7 @@
         <div><span>Tema</span><strong>Câmara Escura</strong></div>
       </div>
 
-      <div class="team-block">
+      <div class="team-block" id="equipe">
         <p class="context-title">Integrantes</p>
         <ul class="team-list" aria-label="Integrantes do projeto">
           <li>Ryan Batistel</li>
@@ -144,7 +146,7 @@
         <a class="button theory-button" href="#simulador">Experimentar agora <span>→</span></a>
       </div>
 
-      <div class="references">
+      <div class="references" id="referencias">
         <p class="references-title">Referências científicas</p>
         <ol>
           <li>Mielenz, K. D. <a href="https://nvlpubs.nist.gov/nistpubs/jres/104/5/j45mie.pdf" target="_blank" rel="noopener noreferrer">On the Diffraction Limit for Lensless Imaging</a>. Journal of Research of NIST, 1999.</li>
